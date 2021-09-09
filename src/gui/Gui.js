@@ -23,6 +23,10 @@ class Gui {
         this._guiMain = null;
         this._sidebar = null;
         this._topbar = null;
+        this._lefttopbar = null;
+        this._leftbottombar = null;
+        this._rightbar = null;
+
 
         this._ctrlTablet = null;
         this._ctrlFiles = null;
@@ -45,31 +49,34 @@ class Gui {
     }
 
     initGui() {
+
         this.deleteGui();
 
         this._guiMain = new yagui.GuiMain(this._main.getViewport(), this._main.onCanvasResize.bind(this._main));
+        this._ctrlRendering = new GuiRendering(this._sidebar, this);
 
-        var ctrls = this._ctrls;
-        ctrls.length = 0;
-        var idc = 0;
+        return;
+        // var ctrls = this._ctrls;
+        // ctrls.length = 0;
+        // var idc = 0;
 
-        // Initialize the topbar
-        this._topbar = this._guiMain.addTopbar();
-        ctrls[idc++] = this._ctrlFiles = new GuiFiles(this._topbar, this);
-        // this.initPrint(this._topbar);
-        ctrls[idc++] = this._ctrlScene = new GuiScene(this._topbar, this);
-        // ctrls[idc++] = this._ctrlStates = new GuiStates(this._topbar, this);
-        // ctrls[idc++] = this._ctrlBackground = new GuiBackground(this._topbar, this);
-        // ctrls[idc++] = this._ctrlCamera = new GuiCamera(this._topbar, this);
-        // TODO find a way to get pressure event
-        // ctrls[idc++] = this._ctrlTablet = new GuiTablet(this._topbar, this);
-        // ctrls[idc++] = this._ctrlConfig = new GuiConfig(this._topbar, this);
-        ctrls[idc++] = this._ctrlMesh = new GuiMesh(this._topbar, this);
+        // // Initialize the topbar
+        // // this._topbar = this._guiMain.addTopbar();
+        // // ctrls[idc++] = this._ctrlFiles = new GuiFiles(this._topbar, this);
+        // // this.initPrint(this._topbar);
+        // // ctrls[idc++] = this._ctrlScene = new GuiScene(this._topbar, this);
+        // // ctrls[idc++] = this._ctrlStates = new GuiStates(this._topbar, this);
+        // // ctrls[idc++] = this._ctrlBackground = new GuiBackground(this._topbar, this);
+        // // ctrls[idc++] = this._ctrlCamera = new GuiCamera(this._topbar, this);
+        // // TODO find a way to get pressure event
+        // // ctrls[idc++] = this._ctrlTablet = new GuiTablet(this._topbar, this);
+        // // ctrls[idc++] = this._ctrlConfig = new GuiConfig(this._topbar, this);
+        // ctrls[idc++] = this._ctrlMesh = new GuiMesh(this._topbar, this);
 
-        // Initialize the sidebar
+        // // Initialize the sidebar
         this._sidebar = this._guiMain.addRightSidebar();
         ctrls[idc++] = this._ctrlRendering = new GuiRendering(this._sidebar, this);
-        ctrls[idc++] = this._ctrlTopology = new GuiTopology(this._sidebar, this);
+        // // ctrls[idc++] = this._ctrlTopology = new GuiTopology(this._sidebar, this);
         ctrls[idc++] = this._ctrlSculpting = new GuiSculpting(this._sidebar, this);
 
         // gui extra
@@ -173,8 +180,8 @@ class Gui {
     }
 
     updateMesh() {
-        this._ctrlRendering.updateMesh();
-        this._ctrlTopology.updateMesh();
+        // this._ctrlRendering.updateMesh();
+        // this._ctrlTopology.updateMesh();
         this._ctrlSculpting.updateMesh();
         this._ctrlScene.updateMesh();
         this.updateMeshInfo();

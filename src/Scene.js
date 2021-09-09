@@ -216,7 +216,7 @@ class Scene {
         }
 
         this._mesh = mesh;
-        this.getGui().updateMesh();
+        // this.getGui().updateMesh();
         this.render();
         return mesh;
     }
@@ -396,6 +396,35 @@ class Scene {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
+    loadTextureManual(url) {
+        var self = this;
+        var gl = this._gl;
+        var ShaderMatcap = ShaderLib[Enums.Shader.MATCAP];
+
+        var loadTex = function(path, idMaterial) {
+            var mat = new Image();
+            mat.src = path;
+
+            mat.onload = function() {
+
+                ShaderMatcap.createTexture(gl, mat, idMaterial);
+
+                var meshes = self.getSelectedMeshes();
+                for (var i = 0, nb = meshes.length; i < nb; ++i) {
+                    var mesh = meshes[i];
+                    if (mesh.getShaderType() !== Enums.Shader.MATCAP)
+                        mesh.setShaderType(Enums.Shader.MATCAP);
+                    mesh.setMatcap(0);
+                }
+                self.render();
+
+
+
+            };
+        };
+        loadTex(url, 0);
+    }
+
     /** Load textures (preload) */
     loadTextures() {
         var self = this;
@@ -407,6 +436,7 @@ class Scene {
             mat.src = path;
 
             mat.onload = function() {
+
                 ShaderMatcap.createTexture(gl, mat, idMaterial);
                 self.render();
             };
@@ -503,6 +533,14 @@ class Scene {
         mesh.normalizeSize();
         this.subdivideClamp(mesh);
         return this.addNewMesh(mesh);
+    }
+
+    addPlane() {
+        // var mesh = new Multimesh(Primitives.createCube(this._gl));
+        // mesh.normalizeSize();
+        // mat4.scale(mesh.getMatrix(), mesh.getMatrix(), [0.7, 0.7, 0.7]);
+        // this.subdivideClamp(mesh, true);
+        // return this.addNewMesh(mesh);
     }
 
     addCube() {

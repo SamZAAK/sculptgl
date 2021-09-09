@@ -13,14 +13,6 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
     <link rel='stylesheet' href='css/yagui.css' type='text/css' />
 
-    <script>
-        'use strict';
-
-        window.addEventListener('load', function() {
-            var app = new window.SculptGL();
-            app.start();
-        });
-    </script>
 </head>
 
 <body oncontextmenu='return false;'>
@@ -33,8 +25,68 @@
     <div id='viewport'>
         <canvas id='canvas'></canvas>
     </div>
+    <div class="lefttop" style="position:fixed;">
+        <button onclick='Paint()'>Paint</button>
+        <button onclick='Crease()'>Blow</button>
+        <button onclick='Drag()'>Drag</button>
+    </div>
+    <div class="leftbottom" style="position:fixed; bottom:0px;">
+        <button onclick="LoadTexture('resources/bg.png')">TextureA</button>
+        <button onclick="LoadTexture('resources/dropper.png')">TextureB</button>
+        <button onclick="LoadTexture('resources/uv.png')">TextureC</button>
+
+        <button onclick='Undo()'>Back</button>
+    </div>
+    <div class="righttop" style="position:fixed; right:0px;">
+        <button onclick='Drag()'>Drag</button>
+    </div>
+
 
     <script src='sculptgl.js'></script>
+    <script>
+        'use strict';
+
+        var app;
+
+        window.addEventListener('load', function() {
+            app = new window.SculptGL();
+            app.start();
+
+            app._background.loadBackgroundURL("resources/bg.png");
+
+        });
+
+        function Paint() {
+            // console.log("pinch");
+            app._sculptManager.setToolIndex(1);
+
+        }
+
+        function Crease() {
+            // console.log("crease");
+
+            app._sculptManager.setToolIndex(6);
+
+        }
+
+        function Drag() {
+            // console.log("crease");
+
+            app._sculptManager.setToolIndex(7);
+
+        }
+
+
+        function LoadTexture(url) {
+            app.loadTextureManual(url);
+        }
+
+        function Undo() {
+            console.log(app);
+
+            app._stateManager.undo();
+        }
+    </script>
 </body>
 
 </html>

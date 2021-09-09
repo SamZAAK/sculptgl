@@ -11,6 +11,7 @@ var MOUSE_LEFT = 1;
 var MOUSE_MIDDLE = 2;
 var MOUSE_RIGHT = 3;
 
+
 // Manage events
 class SculptGL extends Scene {
 
@@ -449,9 +450,9 @@ class SculptGL extends Scene {
             this._action = Enums.Action.SCULPT_EDIT;
 
         if (this._action === Enums.Action.CAMERA_ROTATE || this._action === Enums.Action.CAMERA_ZOOM)
-        //   this._camera.start(mouseX, mouseY);
+            this._camera.start(mouseX, mouseY);
 
-            this._lastMouseX = mouseX;
+        this._lastMouseX = mouseX;
         this._lastMouseY = mouseY;
     }
 
