@@ -25,6 +25,10 @@ class GuiRendering {
         // this.init(guiParent);
     }
 
+    initMini() {
+
+    }
+
     init(guiParent) {
         var menu = this._menu = guiParent.addMenu(TR('renderingTitle'));
         menu.close();

@@ -7,7 +7,10 @@ class SculptManager {
     constructor(main) {
         this._main = main;
 
+        this._oldMesh = null;
+
         this._toolIndex = Enums.Tools.CREASE; // sculpting mode
+        this._tempToolIndex = Enums.Tools.CREASE;
         this._tools = []; // the sculpting tools
 
         // symmetry stuffs
@@ -28,6 +31,13 @@ class SculptManager {
 
     getToolIndex() {
         return this._toolIndex;
+    }
+
+    setTempToolIndex(id) {
+        this._tempToolIndex = id;
+    }
+    getTempToolIndex() {
+        return this._tempToolIndex;
     }
 
     getCurrentTool() {
@@ -76,7 +86,34 @@ class SculptManager {
         var canEdit = tool.start(ctrl);
         if (this._main.getPicking().getMesh() && this.isUsingContinuous())
             this._sculptTimer = window.setInterval(tool._cbContinuous, 16.6);
+
+        this.selectionChanged(this._main.getPicking().getMesh());
         return canEdit;
+    }
+
+    selectionChanged(mesh) {
+        console.log(mesh.name);
+
+        if (mesh == null || mesh == this._oldMesh) {
+
+        } else {
+            console.log("h");
+            if (mesh.name == "head") {
+                this.setToolIndex(this.getTempToolIndex());
+
+            } else {
+                var id = this.getToolIndex();
+
+                this.setTempToolIndex(id);
+
+                this.setToolIndex(12);
+            }
+            console.log(this.getTempToolIndex());
+
+            this._oldMesh = mesh;
+
+
+        }
     }
 
     end() {

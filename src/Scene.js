@@ -19,6 +19,9 @@ import ShaderLib from 'render/ShaderLib';
 import MeshStatic from 'mesh/meshStatic/MeshStatic';
 import WebGLCaps from 'render/WebGLCaps';
 
+import Shader from 'render/ShaderLib';
+
+
 class Scene {
 
     constructor() {
@@ -50,6 +53,8 @@ class Scene {
         this._torusRadial = 32;
         this._torusTubular = 128;
 
+        this._mainObj = null;
+
         // renderable stuffs
         var opts = getOptionsURL();
         this._showContour = opts.outline;
@@ -70,7 +75,7 @@ class Scene {
         this._gui = new Gui(this);
 
         this._preventRender = false; // prevent multiple render per frame
-        this._drawFullScene = false; // render everything on the rtt
+        this._drawFullScene = true; // render everything on the rtt
         this._autoMatrix = opts.scalecenter; // scale and center the imported meshes
         this._vertexSRGB = true; // srgb vs linear colorspace for vertex color
     }
@@ -98,6 +103,8 @@ class Scene {
         var modelURL = getOptionsURL().modelurl;
         if (modelURL) this.addModelURL(modelURL);
         else this.addSphere();
+
+
     }
 
     addModelURL(url) {
@@ -247,7 +254,7 @@ class Scene {
         var gl = this._gl;
         if (!gl) return;
 
-        if (this._drawFullScene) this._drawScene();
+        if (this._drawFullScene) this._drawScene(true);
 
         gl.disable(gl.DEPTH_TEST);
 
@@ -262,9 +269,42 @@ class Scene {
         gl.enable(gl.DEPTH_TEST);
 
         this._sculptManager.postRender(); // draw sculpting gizmo stuffs
+
     }
 
-    _drawScene() {
+    screenshot() {
+
+        this._preventRender = false;
+        this.updateMatricesAndSort();
+
+        var gl = this._gl;
+        if (!gl) return;
+
+        if (this._drawFullScene) this._drawScene(false);
+
+        gl.disable(gl.DEPTH_TEST);
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttMerge.getFramebuffer());
+        this._rttMerge.render(this); // merge + decode
+
+        // render to screen
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+        this._rttOpaque.render(this); // fxaa
+
+        gl.enable(gl.DEPTH_TEST);
+
+        this._sculptManager.postRender(); // draw sculpting gizmo stuffs
+        // open in new window like this
+        var w = window.open('', '');
+        w.document.title = "Screenshot";
+        var img = new Image();
+        // Without 'preserveDrawingBuffer' set to true, we must render now
+        img.src = document.getElementById('canvas').toDataURL();
+        w.document.body.appendChild(img);
+    }
+
+    _drawScene(bg) {
         var gl = this._gl;
         var i = 0;
         var meshes = this._meshes;
@@ -301,7 +341,7 @@ class Scene {
         if (this._meshPreview) this._meshPreview.render(this);
 
         // background
-        this._background.render();
+        if (bg) this._background.render();
 
         ///////////////
         // TRANSPARENT PASS
@@ -408,17 +448,9 @@ class Scene {
             mat.onload = function() {
 
                 ShaderMatcap.createTexture(gl, mat, idMaterial);
+                self._mainObj.setMatcap(0);
 
-                var meshes = self.getSelectedMeshes();
-                for (var i = 0, nb = meshes.length; i < nb; ++i) {
-                    var mesh = meshes[i];
-                    if (mesh.getShaderType() !== Enums.Shader.MATCAP)
-                        mesh.setShaderType(Enums.Shader.MATCAP);
-                    mesh.setMatcap(0);
-                }
                 self.render();
-
-
 
             };
         };
@@ -530,17 +562,66 @@ class Scene {
     addSphere() {
         // make a cube and subdivide it
         var mesh = new Multimesh(Primitives.createCube(this._gl));
+        mesh.name = "head";
         mesh.normalizeSize();
         this.subdivideClamp(mesh);
-        return this.addNewMesh(mesh);
+
+        this._meshes.push(mesh);
+        // this._stateManager.pushStateAdd(mesh);
+        this.setMesh(mesh);
+
+        this._mainObj = mesh;
+        // return this.addNewMesh(mesh);
     }
 
-    addPlane() {
-        // var mesh = new Multimesh(Primitives.createCube(this._gl));
-        // mesh.normalizeSize();
-        // mat4.scale(mesh.getMatrix(), mesh.getMatrix(), [0.7, 0.7, 0.7]);
-        // this.subdivideClamp(mesh, true);
-        // return this.addNewMesh(mesh);
+
+
+
+    addPlane(url) {
+        var mesh = new Multimesh(Primitives.createPlane(this._gl));
+
+        mesh.normalizeSize();
+
+        var mCen = mesh.getMatrix();
+
+        console.log(mesh);
+        mat4.scale(mCen, mCen, [0.2, 0.2, 0.2]);
+        mat4.translate(mCen, mCen, [0, 0, 2.1]);
+        mat4.rotateX(mCen, mCen, 1.57);
+
+        mesh.name = "eye";
+
+
+        var self = this;
+        var gl = this._gl;
+        var ShaderUV = ShaderLib[Enums.Shader.UV];
+
+        var loadTex = function(path, idMaterial) {
+            var mat = new Image();
+            mat.src = path;
+
+            mat.onload = function() {
+
+
+                ShaderUV.createTexture(gl, mat, idMaterial);
+                mesh.setMatcap(idMaterial);
+
+                self.render();
+
+                console.log(mesh);
+
+
+
+            };
+        };
+        loadTex(url, 1);
+
+
+
+        // img.src = 'resources/eyes/BastelAugen.png';
+
+        return this.addNewMesh(mesh);
+
     }
 
     addCube() {
@@ -649,6 +730,8 @@ class Scene {
             meshes.splice(this.getIndexMesh(rm[i]), 1);
     }
 
+
+
     getIndexMesh(mesh, select) {
         var meshes = select ? this._selectMeshes : this._meshes;
         var id = mesh.getID();
@@ -661,6 +744,7 @@ class Scene {
     }
 
     getIndexSelectMesh(mesh) {
+
         return this.getIndexMesh(mesh, true);
     }
 

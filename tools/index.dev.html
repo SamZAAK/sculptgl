@@ -38,7 +38,10 @@
         <button onclick='Undo()'>Back</button>
     </div>
     <div class="righttop" style="position:fixed; right:0px;">
-        <button onclick='Drag()'>Drag</button>
+        <button onclick='Eye()'>Eye1</button>
+    </div>
+    <div class="rightbottom" style="position:fixed; right:0px;bottom:0px;">
+        <button onclick='takeScreenshot()'>Screenshot</button>
     </div>
 
 
@@ -56,9 +59,13 @@
 
         });
 
+
+
+
         function Paint() {
             // console.log("pinch");
             app._sculptManager.setToolIndex(1);
+            app._sculptManager.setTempToolIndex(1);
 
         }
 
@@ -66,6 +73,7 @@
             // console.log("crease");
 
             app._sculptManager.setToolIndex(6);
+            app._sculptManager.setTempToolIndex(6);
 
         }
 
@@ -73,6 +81,13 @@
             // console.log("crease");
 
             app._sculptManager.setToolIndex(7);
+            app._sculptManager.setTempToolIndex(7);
+        }
+
+        function Eye() {
+            app.addPlane('resources/eyes/BastelAugen.png');
+            app._sculptManager.setToolIndex(12);
+
 
         }
 
@@ -85,6 +100,12 @@
             console.log(app);
 
             app._stateManager.undo();
+        }
+
+
+        function takeScreenshot() {
+
+            app.screenshot();
         }
     </script>
 </body>

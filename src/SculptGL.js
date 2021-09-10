@@ -223,6 +223,7 @@ class SculptGL extends Scene {
     }
 
     onDoubleTap(e) {
+        return;
         if (this._focusGui) {
             return;
         }
@@ -365,9 +366,9 @@ class SculptGL extends Scene {
         event.stopPropagation();
         event.preventDefault();
 
-        this._gui.callFunc('onMouseWheel', event);
-        var dir = event.wheelDelta === undefined ? -event.detail : event.wheelDelta;
-        this.onDeviceWheel(dir > 0 ? 1 : -1);
+        // this._gui.callFunc('onMouseWheel', event);
+        // var dir = event.wheelDelta === undefined ? -event.detail : event.wheelDelta;
+        // this.onDeviceWheel(dir > 0 ? 1 : -1);
     }
 
     ////////////////
@@ -473,13 +474,13 @@ class SculptGL extends Scene {
         if (action === Enums.Action.CAMERA_ZOOM || (action === Enums.Action.CAMERA_PAN_ZOOM_ALT && !event.altKey)) {
 
             Multimesh.RENDER_HINT = Multimesh.CAMERA;
-            this._camera.zoom((mouseX - this._lastMouseX + mouseY - this._lastMouseY) * speedFactor);
+            // this._camera.zoom((mouseX - this._lastMouseX + mouseY - this._lastMouseY) * speedFactor);
             this.render();
 
         } else if (action === Enums.Action.CAMERA_PAN_ZOOM_ALT || action === Enums.Action.CAMERA_PAN) {
 
             Multimesh.RENDER_HINT = Multimesh.CAMERA;
-            this._camera.translate((mouseX - this._lastMouseX) * speedFactor, (mouseY - this._lastMouseY) * speedFactor);
+            // this._camera.translate((mouseX - this._lastMouseX) * speedFactor, (mouseY - this._lastMouseY) * speedFactor);
             this.render();
 
         } else if (action === Enums.Action.CAMERA_ROTATE) {
