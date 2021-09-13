@@ -11,7 +11,8 @@
     <title> SculptGL - A WebGL sculpting app </title>
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
-    <link rel='stylesheet' href='css/yagui.css' type='text/css' />
+    <!-- <link rel='stylesheet' href='css/yagui.css' type='text/css' /> -->
+    <link rel='stylesheet' href='css/sam.css' type='text/css' />
 
 </head>
 
@@ -25,23 +26,67 @@
     <div id='viewport'>
         <canvas id='canvas'></canvas>
     </div>
-    <div class="lefttop" style="position:fixed;">
-        <button onclick='Paint()'>Paint</button>
-        <button onclick='Crease()'>Blow</button>
-        <button onclick='Drag()'>Drag</button>
+    <div class="lefttop" style="position:fixed;left:0px;top:0px;">
+        <span class="dropdown">
+            <h2>Werkzeuge</h2>
+            <button class="selectable" onclick='Paint()'>
+                <image class="icon" src="resources/ui/pull.png"></image>
+            </button>
+            <button class="selectable" onclick='Crease()'>
+                <image class="icon" src="resources/ui/push.png"></image>
+            </button>
+            <button class="selectable" onclick='Drag()'>
+                <image class="icon" src="resources/ui/pull.png"></image>
+            </button>
+        </span>
+        <span class="dropdown">
+            <h2>Textur</h2>
+            <button class="selectable" onclick="LoadTexture('resources/bg.png')">
+                <image class="icon" src="resources/ui/1.png"></image>
+            </button>
+            <button class="selectable" onclick="LoadTexture('resources/dropper.png')">
+                <image class="icon" src="resources/ui/2.png"></image>
+            </button>
+            <button class="selectable" onclick="LoadTexture('resources/uv.png')">
+                <image class="icon" src="resources/ui/3.png"></image>
+            </button>
+        </span>
     </div>
     <div class="leftbottom" style="position:fixed; bottom:0px;">
-        <button onclick="LoadTexture('resources/bg.png')">TextureA</button>
-        <button onclick="LoadTexture('resources/dropper.png')">TextureB</button>
-        <button onclick="LoadTexture('resources/uv.png')">TextureC</button>
-
-        <button onclick='Undo()'>Back</button>
+        <span class="dropdown">
+            
+            <button style="border-radius: 100%;" onclick='Undo()'>
+                <image class="icon" src="resources/ui/back.png"></image>
+            </button>
+        </span>
     </div>
-    <div class="righttop" style="position:fixed; right:0px;">
-        <button onclick='Eye()'>Eye1</button>
+    <div class="righttop" style="position:fixed; right:0px;top:0px;">
+        <span class="dropdown">
+            <h2>Drag & Drop</h2>
+            <button class="selectable" onclick='Eye(1)'>
+                <image class="icon" src="resources/eyes/1.png"></image>
+            </button>
+            <button class="selectable" onclick='Eye(2)'>
+                <image class="icon" src="resources/eyes/2.png"></image>
+            </button>
+            <button class="selectable" onclick='Eye(3)'>
+                <image class="icon" src="resources/eyes/3.png"></image>
+            </button>
+            <button class="selectable" onclick='Eye(4)'>
+                <image class="icon" src="resources/eyes/4.png"></image>
+            </button>
+            <button class="selectable" onclick='Eye(5)'>
+                <image class="icon" src="resources/eyes/5.png"></image>
+            </button>
+            <button class="selectable" onclick='Eye(6)'>
+                <image class="icon" src="resources/eyes/6.png"></image>
+            </button>
+        </span>
     </div>
     <div class="rightbottom" style="position:fixed; right:0px;bottom:0px;">
-        <button onclick='takeScreenshot()'>Screenshot</button>
+        <span class="dropdown">
+            <button style="width:140px;" onclick='takeScreenshot()'>Fertig?</button>
+        </span>
     </div>
 
 
@@ -84,8 +129,8 @@
             app._sculptManager.setTempToolIndex(7);
         }
 
-        function Eye() {
-            app.addPlane('resources/eyes/BastelAugen.png');
+        function Eye(id) {
+            app.addPlane(id);
             app._sculptManager.setToolIndex(12);
 
 

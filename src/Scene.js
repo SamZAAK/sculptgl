@@ -574,10 +574,7 @@ class Scene {
         // return this.addNewMesh(mesh);
     }
 
-
-
-
-    addPlane(url) {
+    addPlane(id) {
         var mesh = new Multimesh(Primitives.createPlane(this._gl));
 
         mesh.normalizeSize();
@@ -585,36 +582,39 @@ class Scene {
         var mCen = mesh.getMatrix();
 
         console.log(mesh);
-        mat4.scale(mCen, mCen, [0.2, 0.2, 0.2]);
-        mat4.translate(mCen, mCen, [0, 0, 2.1]);
+
+        mat4.scale(mCen, mCen, [0.2, 0.2, 1]);
+        mat4.translate(mCen, mCen, [0, 0, 4]);
+
         mat4.rotateX(mCen, mCen, 1.57);
 
         mesh.name = "eye";
 
 
         var self = this;
-        var gl = this._gl;
-        var ShaderUV = ShaderLib[Enums.Shader.UV];
+        // var gl = this._gl;
+        // var ShaderUV = ShaderLib[Enums.Shader.UV];
 
-        var loadTex = function(path, idMaterial) {
-            var mat = new Image();
-            mat.src = path;
+        // var loadTex = function(path, idMaterial) {
+        //     var mat = new Image();
+        //     mat.src = path;
 
-            mat.onload = function() {
-
-
-                ShaderUV.createTexture(gl, mat, idMaterial);
-                mesh.setMatcap(idMaterial);
-
-                self.render();
-
-                console.log(mesh);
+        //     mat.onload = function() {
 
 
+        //         // ShaderUV.createTexture(gl, mat, idMaterial);
+        //         // mesh.setUV(idMaterial);
+        //         mesh.setShaderType(Enums.Shader.PBR);
 
-            };
-        };
-        loadTex(url, 1);
+        //         self.render();
+
+        //         console.log(mesh);
+
+
+
+        //     };
+        // };
+        // loadTex('resources/eyes/' + id + '.png', id);
 
 
 

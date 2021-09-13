@@ -6,7 +6,26 @@ import pbrGLSL from 'render/shaders/glsl/pbr.glsl';
 var ShaderPBR = ShaderBase.getCopy();
 ShaderPBR.vertexName = ShaderPBR.fragmentName = 'ShadingPBR';
 
-ShaderPBR.textures = [];
+var eyePath = 'resources/eyes/';
+
+ShaderPBR.textures = [{
+        path: eyePath + '1.png'
+    }, {
+        path: eyePath + '2.png'
+    },
+    {
+        path: eyePath + '3.png'
+    },
+    {
+        path: eyePath + '4.png'
+    },
+    {
+        path: eyePath + '5.png'
+    },
+    {
+        path: eyePath + '6.png'
+    },
+];
 
 ShaderPBR.createTexture = function(gl, img, idMaterial) {
     var idTex = gl.createTexture();
@@ -52,7 +71,9 @@ ShaderPBR.environments = [{
 
 var opts = getOptionsURL();
 ShaderPBR.idEnv = Math.min(opts.environment, ShaderPBR.environments.length - 1);
+ShaderPBR.idTex = Math.min(opts.environment, ShaderPBR.textures.length - 1);
 ShaderPBR.exposure = opts.exposure === undefined ? ShaderPBR.environments[ShaderPBR.idEnv].exposure : Math.min(opts.exposure, 5);
+
 
 ShaderPBR.uniforms = {};
 ShaderPBR.attributes = {};

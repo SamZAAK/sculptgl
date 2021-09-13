@@ -43,9 +43,6 @@ ShaderMatcap.matcaps = [{
 }, {
     path: texPath + 'white.jpg',
     name: TR('matcapWhite')
-}, {
-    path: texPath + 'BastelAugen.png',
-    name: 'BastelAugen'
 }];
 
 ShaderMatcap.uniforms = {};
