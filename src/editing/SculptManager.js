@@ -92,14 +92,14 @@ class SculptManager {
     }
 
     selectionChanged(mesh) {
-        console.log(mesh.name);
+        // console.log(mesh.name);
 
         if (mesh == null || mesh == this._oldMesh) {
 
         } else {
-            console.log("h");
             if (mesh.name == "head") {
-                this.setToolIndex(this.getTempToolIndex());
+                // this.setToolIndex(this.getTempToolIndex());
+                this.setToolIndex(1);
 
             } else {
                 var id = this.getToolIndex();
@@ -108,7 +108,7 @@ class SculptManager {
 
                 this.setToolIndex(12);
             }
-            console.log(this.getTempToolIndex());
+            // console.log(this.getTempToolIndex());
 
             this._oldMesh = mesh;
 

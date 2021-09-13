@@ -581,44 +581,35 @@ class Scene {
 
         var mCen = mesh.getMatrix();
 
-        console.log(mesh);
 
-        mat4.scale(mCen, mCen, [0.2, 0.2, 1]);
-        mat4.translate(mCen, mCen, [0, 0, 4]);
+        mat4.scale(mCen, mCen, [0.1, 0.1, 0.1]);
+        mat4.translate(mCen, mCen, [0, 0, 7]);
 
         mat4.rotateX(mCen, mCen, 1.57);
 
         mesh.name = "eye";
 
-
+        mesh.setShaderType(Enums.Shader.PBR);
+        mesh.setMatcap(id);
         var self = this;
-        // var gl = this._gl;
-        // var ShaderUV = ShaderLib[Enums.Shader.UV];
 
-        // var loadTex = function(path, idMaterial) {
+
+        // //Load Image
+        // var loadTex = function(path, _id) {
         //     var mat = new Image();
         //     mat.src = path;
 
         //     mat.onload = function() {
 
-
-        //         // ShaderUV.createTexture(gl, mat, idMaterial);
-        //         // mesh.setUV(idMaterial);
-        //         mesh.setShaderType(Enums.Shader.PBR);
-
-        //         self.render();
-
-        //         console.log(mesh);
-
+        //         ShaderPBR.createTexture(self.gl, mat, _id)
 
 
         //     };
         // };
-        // loadTex('resources/eyes/' + id + '.png', id);
+        // loadTex('resources/eyes/1.png', id);
 
 
 
-        // img.src = 'resources/eyes/BastelAugen.png';
 
         return this.addNewMesh(mesh);
 
@@ -627,6 +618,7 @@ class Scene {
     addCube() {
         var mesh = new Multimesh(Primitives.createCube(this._gl));
         mesh.normalizeSize();
+        mesh.setMaterials()
         mat4.scale(mesh.getMatrix(), mesh.getMatrix(), [0.7, 0.7, 0.7]);
         this.subdivideClamp(mesh, true);
         return this.addNewMesh(mesh);

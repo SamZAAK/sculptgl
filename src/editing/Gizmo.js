@@ -3,11 +3,11 @@ import Primitives from 'drawables/Primitives';
 import Enums from 'misc/Enums';
 
 // configs colors
-var COLOR_X = vec3.fromValues(0.7, 0.2, 0.2);
-var COLOR_Y = vec3.fromValues(0.2, 0.7, 0.2);
-var COLOR_Z = vec3.fromValues(0.2, 0.2, 0.7);
+var COLOR_X = vec3.fromValues(1, 1, 1);
+var COLOR_Y = vec3.fromValues(1, 1, 1);
+var COLOR_Z = vec3.fromValues(1, 1, 1);
 var COLOR_GREY = vec3.fromValues(0.4, 0.4, 0.4);
-var COLOR_SW = vec3.fromValues(0.8, 0.4, 0.2);
+var COLOR_SW = vec3.fromValues(1, 1, 1);
 
 // overall scale of the gizmo
 var GIZMO_SIZE = 80.0;
@@ -32,7 +32,7 @@ var createGizmo = function(type, nbAxis = -1) {
         _finalMatrix: mat4.create(),
         _baseMatrix: mat4.create(),
         _color: vec3.create(),
-        _colorSelect: vec3.fromValues(1.0, 1.0, 0.0),
+        _colorSelect: vec3.fromValues(0, 237 / 255, 50 / 255), //1.0, 1.0, 0.0),
         _drawGeo: null,
         _pickGeo: null,
         _isSelected: false,
@@ -385,15 +385,15 @@ class Gizmo {
     }
 
     _updateLineHelper(x1, y1, x2, y2) {
-        var vAr = this._lineHelper.getVertices();
-        var main = this._main;
-        var width = main.getCanvasWidth();
-        var height = main.getCanvasHeight();
-        vAr[0] = (x1 / width) * 2.0 - 1.0;
-        vAr[1] = ((height - y1) / height) * 2.0 - 1.0;
-        vAr[3] = (x2 / width) * 2.0 - 1.0;
-        vAr[4] = ((height - y2) / height) * 2.0 - 1.0;
-        this._lineHelper.updateVertexBuffer();
+        // var vAr = this._lineHelper.getVertices();
+        // var main = this._main;
+        // var width = main.getCanvasWidth();
+        // var height = main.getCanvasHeight();
+        // vAr[0] = (x1 / width) * 2.0 - 1.0;
+        // vAr[1] = ((height - y1) / height) * 2.0 - 1.0;
+        // vAr[3] = (x2 / width) * 2.0 - 1.0;
+        // vAr[4] = ((height - y2) / height) * 2.0 - 1.0;
+        // this._lineHelper.updateVertexBuffer();
     }
 
     _saveEditMatrices() {

@@ -78,7 +78,7 @@ ShaderPBR.exposure = opts.exposure === undefined ? ShaderPBR.environments[Shader
 ShaderPBR.uniforms = {};
 ShaderPBR.attributes = {};
 
-ShaderPBR.uniformNames = ['uIblTransform', 'uTexture0', 'uAlbedo', 'uRoughness', 'uMetallic', 'uExposure', 'uSPH', 'uEnvSize'];
+ShaderPBR.uniformNames = ['uIblTransform', 'uTexture0', 'uTexture1', 'uAlbedo', 'uRoughness', 'uMetallic', 'uExposure', 'uSPH', 'uEnvSize'];
 Array.prototype.push.apply(ShaderPBR.uniformNames, ShaderBase.uniformNames.commonUniforms);
 
 ShaderPBR.vertex = [
@@ -194,12 +194,19 @@ ShaderPBR.updateUniforms = function(mesh, main) {
     gl.uniform1f(uniforms.uExposure, ShaderPBR.exposure);
 
     var env = ShaderPBR.environments[ShaderPBR.idEnv];
+    var img = ShaderPBR.textures[mesh.getMatcap()];
+
     gl.uniform3fv(uniforms.uSPH, env.sph);
     if (env.size) gl.uniform2fv(uniforms.uEnvSize, env.size);
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, ShaderPBR.getOrCreateEnvironment(gl, main, env) || this.getDummyTexture(gl));
     gl.uniform1i(uniforms.uTexture0, 0);
+
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, ShaderPBR.getOrCreateTexture0(gl, main, img) || this.getDummyTexture(gl));
+    gl.uniform1i(uniforms.uTexture1, 0);
+
 
     ShaderBase.updateUniforms.call(this, mesh, main);
 };
