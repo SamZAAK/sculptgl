@@ -19,19 +19,27 @@ body {
     margin: 0;
     font-family: 'Monument Grotesk';
     letter-spacing: .1rem;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.tools {
+    margin: 10px;
 }
 
 h2 {
-    width: 140px;
     border-radius: 10px;
-    background-color: white;
+    /* background-color: white; */
+    font-family: 'Monument Grotesk';
     text-align: center;
     padding: 5px 10px;
     margin: 10px;
 }
 
 button {
-    width: 100px;
     font-family: 'Monument Grotesk';
     letter-spacing: .1rem;
     border-radius: 10px;
@@ -42,20 +50,75 @@ button {
     padding: 5px 10px;
 }
 
+.active,
+button:hover,
+.dropdownButton:hover {
+    background-color: #ff003e;
+}
+
 .icon {
     width: 100%;
     height: auto;
 }
 
+.trash {
+    width: 100px;
+    height: 100px;
+    bottom: 0;
+    left: 45%;
+    right: 0;
+    position: fixed;
+    transition: bottom 0.2s ease-out;
+}
+
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    pointer-events: none;
+}
+
 .selectable {
     background: url(../resources/ui/bg.png) no-repeat;
     background-size: 100%;
+    width: 100px;
+    height: 100px;
+    min-height: 100px;
+}
+
+.dropdownButton {
+    background-color: #ffffff;
+    width: 160px;
 }
 
 .dropdown {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 160px;
+    /* width: 160px; */
     margin: 10px;
+    /* pointer-events: none; */
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.lefttop {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media all and (max-width: 1000px) {
+    .lefttop {
+        flex-direction: row;
+    }
+    .dropdown {
+        padding: 0 18px;
+        overflow: hidden;
+    }
 }

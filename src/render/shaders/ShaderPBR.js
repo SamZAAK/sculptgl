@@ -53,7 +53,7 @@ ShaderPBR.environments = [{
     // https://hdrihaven.com/hdri/?h=studio_small_01
     path: texPath + 'studio_small_01_1k.png',
     sph: [0.534107, 0.589985, 0.617478, 0.119999, 0.130480, 0.128019, 0.089872, 0.088707, 0.088017, 0.099999, 0.151282, 0.138458, 0.005015, 0.035588, 0.027592, 0.114999, 0.116739, 0.120579, -0.057997, -0.069532, -0.070401, 0.385123, 0.411714, 0.454725, 0.303242, 0.333004, 0.350270],
-    exposure: 0.5,
+    exposure: 0.2,
     name: 'Studio small 01'
 }, {
     // https://hdrihaven.com/hdri/?h=moonless_golf
@@ -72,7 +72,7 @@ ShaderPBR.environments = [{
 var opts = getOptionsURL();
 ShaderPBR.idEnv = Math.min(opts.environment, ShaderPBR.environments.length - 1);
 ShaderPBR.idTex = Math.min(opts.environment, ShaderPBR.textures.length - 1);
-ShaderPBR.exposure = opts.exposure === undefined ? ShaderPBR.environments[ShaderPBR.idEnv].exposure : Math.min(opts.exposure, 5);
+ShaderPBR.exposure = 0.7; //opts.exposure === undefined ? ShaderPBR.environments[ShaderPBR.idEnv].exposure : Math.min(opts.exposure, 5);
 
 
 ShaderPBR.uniforms = {};

@@ -296,12 +296,14 @@ class Scene {
 
         this._sculptManager.postRender(); // draw sculpting gizmo stuffs
         // open in new window like this
-        var w = window.open('', '');
-        w.document.title = "Screenshot";
-        var img = new Image();
-        // Without 'preserveDrawingBuffer' set to true, we must render now
-        img.src = document.getElementById('canvas').toDataURL();
-        w.document.body.appendChild(img);
+        // var w = window.open('', '');
+        // w.document.title = "Screenshot";
+        // var img = new Image();
+        // // Without 'preserveDrawingBuffer' set to true, we must render now
+        // img.src = document.getElementById('canvas').toDataURL();
+
+        // w.document.body.appendChild(img);
+        this._drawScene(true);
     }
 
     _drawScene(bg) {
@@ -436,10 +438,12 @@ class Scene {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
-    loadTextureManual(url) {
+    loadTextureManual(url, id) {
+
         var self = this;
         var gl = this._gl;
         var ShaderMatcap = ShaderLib[Enums.Shader.MATCAP];
+        var ShaderPBR = ShaderLib[Enums.Shader.PBR];
 
         var loadTex = function(path, idMaterial) {
             var mat = new Image();
@@ -447,14 +451,31 @@ class Scene {
 
             mat.onload = function() {
 
-                ShaderMatcap.createTexture(gl, mat, idMaterial);
-                self._mainObj.setMatcap(0);
+                // ShaderMatcap.createTexture(gl, mat, idMaterial);
+                if (idMaterial == 0) {
+
+                    self._mainObj.setShaderType(Enums.Shader.MATCAP);
+                    self._mainObj.setMatcap(idMaterial + 2);
+                } else if (idMaterial == 1) {
+                    self._mainObj.setShaderType(Enums.Shader.PBR);
+                    ShaderPBR.idEnv = 2;
+
+                    ShaderPBR.idTex = 2;
+
+                } else if (idMaterial == 2) {
+                    self._mainObj.setShaderType(Enums.Shader.MATCAP);
+
+                    // ShaderMatcap.createTexture(gl, mat, idMaterial + 2);
+                    self._mainObj.setMatcap(idMaterial + 5);
+
+
+                }
 
                 self.render();
 
             };
         };
-        loadTex(url, 0);
+        loadTex(url, id);
     }
 
     /** Load textures (preload) */
