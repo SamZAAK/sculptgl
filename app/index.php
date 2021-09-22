@@ -18,10 +18,7 @@
         }
 
     </script>
-    <script src='sculptgl.js'></script>
-    <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.min.js"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src='blick.js'></script>
+
     <style>
         * {
             padding: 0;
@@ -224,7 +221,7 @@
         }
 
         .selectable {
-            background: url(../resources/ui/bg.png) no-repeat;
+            background: url('resources/ui/bg.png') no-repeat;
             background-size: 100%;
             width: 100px;
             height: 100px;
@@ -269,6 +266,10 @@
 </head>
 
 <body>
+    <script src='sculptgl.js'></script>
+    <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src='blick.js'></script>
     <input type='file' id='fileopen' multiple style='display: none' />
     <input type='file' id='backgroundopen' style='display: none' />
     <input type='file' id='alphaopen' style='display: none' />

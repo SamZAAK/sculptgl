@@ -1,37 +1,12 @@
-//Animation Stuff
-
-var acc = document.getElementsByClassName("dropdownButton");
-var addedToEye = 0;
-console.log(acc);
-
-for (var i = 0; i < acc.length; i++) {
-    console.log(acc[i]);
-
-    acc[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var panel = this.nextElementSibling;
-        if (panel.style.maxHeight) {
-            panel.style.maxHeight = null;
-        } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
-        }
-    });
-
-    var panel = acc[i].nextElementSibling;
-
-    panel.style.maxHeight = panel.scrollHeight + "px";
-}
-
-
+'use strict'
 
 ////
-
 var app;
 var _this = this;
 var eyeEmpty = [];
-
-
-var trash = document.getElementById("trash");
+var trash;
+var addedToEye = 0;
+var allEyes;
 
 // if you have multiple .draggable elements
 // get all draggie elements
@@ -40,16 +15,60 @@ var draggableElems = document.querySelectorAll('.draggable');
 var draggies = []
 var eyeURLs = ['resources/eyes/1.png', 'resources/eyes/2.png', 'resources/eyes/3.png', 'resources/eyes/4.png', 'resources/eyes/5.png', 'resources/eyes/6.png']
 
-var allEyes = document.querySelectorAll('#eye');
-console.log(allEyes);
-for (var i = 0; i < allEyes.length; i++) {
-    var eye = allEyes[i];
 
-    makeeye(i, eye);
-    eyeEmpty[i] = false;
+window.addEventListener('resize', onWindowResize);
+
+
+window.addEventListener('load', function() {
+
+    app = new window.SculptGL();
+    app.start();
+
+    app._background.loadBackgroundURL("resources/bg.png");
+
+
+    registerDropdowns(document.getElementsByClassName("dropdownButton"));
+    trash = document.getElementById("trash");
+
+    allEyes = document.querySelectorAll('#eye');
+    for (var i = 0; i < allEyes.length; i++) {
+        var eye = allEyes[i];
+
+        makeeye(i, eye);
+        eyeEmpty[i] = false;
+    }
+
+    setInterval(onTimerTick, 33); // 33 milliseconds = ~ 30 frames per sec
+
+});
+
+function onWindowResize() {
+    console.log(window.innerWidth);
+    for (var i = 0; i < draggies.length; i++) {
+        var elem = draggies[i];
+
+        console.log(elem.position.x / window.innerWidth + " and " + elem.position.y / window.innerHeight);
+    }
 }
 
-setInterval(onTimerTick, 33); // 33 milliseconds = ~ 30 frames per sec
+function registerDropdowns(acc) {
+    console.log(acc.length);
+    for (let d = 0; d < acc.length; d++) {
+        acc[d].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+        });
+
+        var panel = acc[d].nextElementSibling;
+
+        panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+}
 
 function onTimerTick() {
     for (var i = 0; i < eyeEmpty.length; i++) {
@@ -130,13 +149,7 @@ function hasClass(target, className) {
 }
 
 
-window.addEventListener('load', function() {
-    app = new window.SculptGL();
-    app.start();
 
-    app._background.loadBackgroundURL("resources/bg.png");
-
-});
 
 function Paint() {
     // console.log("pinch");
@@ -190,6 +203,9 @@ function createEye(id, parent) {
 
     elem.appendChild(img);
     elem.style.display = "absolute";
+    elem.style.pointerEvents = 'all';
+    elem.style.width = eyeSize;
+    elem.style.height = eyeSize;
     elem.id = id;
 
 
@@ -223,6 +239,7 @@ function takeScreenshot() {
         var img = new Image();
         // Without 'preserveDrawingBuffer' set to true, we must render now
         // img.src = canvas.toDataURL();
+        console.log(canvas);
         save(canvas.toDataURL());
     });
     app.render();
