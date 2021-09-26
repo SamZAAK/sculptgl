@@ -11,14 +11,23 @@
 
     <script>
         function save(dataURL) {
-          $.post('saveImg.php', {
-            imgBase64: dataURL,
-            secs: Date.parse(new Date())
-          });
-        }
+          document.getElementById('hidden_data').value = dataURL;
+          var fd = new FormData(document.forms["monsterform"]);
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'upload_data.php', true);
+          xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) {
+              var percentComplete = (e.loaded / e.total) * 100;
+              console.log(percentComplete + '% uploaded');
+            }
+          };
+          xhr.onload = function () {
+
+          };
+          xhr.send(fd);
+        };
 
     </script>
-
     <style>
         * {
             padding: 0;
@@ -37,7 +46,6 @@
         }
 
         #formular {
-            display:none;
             background-color: #bfbfbf;
             font-family: 'Monument Grotesk';
             box-shadow: -1rem 0 2rem 2em #bfbfbf;
@@ -45,8 +53,13 @@
             position: fixed;
             padding: 3rem 3rem 1rem 1rem;
             width: 30em;
+            right: -35rem;
+            top: 0;
+            transition: right .6s ease-out;
+        }
+
+        #formular.in {
             right: 0;
-            top:0;
         }
 
         #formular input {
@@ -135,6 +148,7 @@
             #formular {
                 width: 100%;
                 padding: 1.5rem 1rem;
+                right: calc(-100% - 5rem);
             }
         }
 
@@ -267,7 +281,7 @@
 
 <body>
     <script src='sculptgl.js'></script>
-    <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.min.js"></script>
+    <script src="draggabilly.pkgd.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src='blick.js'></script>
     <input type='file' id='fileopen' multiple style='display: none' />
@@ -277,7 +291,7 @@
     <input type='file' id='matcapopen' style='display: none' />
 
     <div id='viewport' onclick='toggleForm("none")'>
-        <div id="eyeport" style="position:fixed;z-index: 1000;"></div>
+        <div id="eyeport" style="position:fixed;z-index: 1000;width: 100%;height: 100%; pointer-events: none;"></div>
         <canvas id='canvas'></canvas>
 
     </div>
@@ -337,7 +351,7 @@
             </div>
         </div>
         <div class="rightbottom" style="position:fixed; right:0px;bottom:0px;">
-            <h2> <button style="width:140px;" onclick='toggleForm("block")'>Fertig?</button></h2>
+            <h2> <button id="fertig" style="width:140px;" onclick='toggleForm("in");takeScreenshot();'>Fertig?</button></h2>
         </div>
 
         <div class="trash" id="trash">
@@ -347,6 +361,7 @@
     <div id="formular">
 
         <?php
+
         if (isset($_POST['submit'])) {
             $dbhost = 'windspie.mysql.db.hostpoint.ch';
             $dbuser = 'windspie_blickf';
@@ -357,18 +372,15 @@
             if (!$conn) {
                 die('Could not connect: ' . mysqli_error());
             }
-            $inp_name = $_POST['inp-name'];
+            include 'upload_data.php';
             $inp_email = $_POST['inp-email'];
+            $inp_name = $_POST['inp-name'];
             $inp_newsletter = $_POST['inp-newsletter'];
-            $img = $_POST['imgBase64'];
-            $secs = $_POST['secs'];
-            $img = str_replace('data:image/png;base64,', '', $img);
-            $img = str_replace(' ', '+', $img);
-            $fileData = base64_decode($img);
-            $fileName = 'monsters/' . $secs . '_' . $inp_name . '_' . $inp_email . '.png';
-            file_put_contents($fileName, $fileData);
+            $upload_dir = "https://blickfelder.ch/testformular/monsters/";
+            $file = $upload_dir . $time . ".png";
+            $filename = $file;
 
-            $sql = "INSERT INTO monsters " . "(name,email,newsletter,datestamp) " . "VALUES('$inp_name','$inp_email','$inp_newsletter',NOW())";
+            $sql = "INSERT INTO monsters " . "(name,email,newsletter,monsterimg,datestamp) " . "VALUES('$inp_name','$inp_email','$inp_newsletter','$filename',NOW())";
             $retval = mysqli_query($conn, $sql);
 
             if (!$retval) {
@@ -381,7 +393,7 @@
         } else {
         ?>
 
-            <form action="<?php $_PHP_SELF ?>" method="post">
+            <form action="https://blickfelder.ch/oktober/danke" method="post" name="monsterform">
                 <div class="form-group" id="fg-name">
                     <label class="control-label" for="inp-name">Dein Name (real oder Pseudonym)*:</label> <input class="form-control" id="inp-name" name="inp-name" required="" type="text" value="">
                 </div>
@@ -394,7 +406,10 @@
                             Ja, ich möchte den Blickfelder-Newsletter abonnieren.
                         </p>
                     </label>
-                </div><button class="btn btn-primary" id="submitbutton" name="submit" type="submit" value="Abschicken">Abschicken</button>
+
+                </div>
+                <input name="hidden_data" id='hidden_data' type="hidden" />
+                <button class="btn btn-primary" id="submitbutton" name="submit" onclick="" type="submit" value="Abschicken">Abschicken</button>
             </form>
             <p class="small">
                 *Pflichtfeld / Dein Name wird im Archiv aller Kreaturen neben deiner Kreation stehen.
