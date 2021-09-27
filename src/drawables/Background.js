@@ -25,7 +25,7 @@ class Background {
 
     init() {
         this.getTexCoordBuffer().update(new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0]));
-        this._monoTex = this.createOnePixelTexture(108, 232, 85, 255);
+        this._monoTex = this.createOnePixelTexture(108, 232, 85, 0);
         // document.getElementById('backgroundopen').addEventListener('change', this.loadBackground.bind(this), false);
     }
 

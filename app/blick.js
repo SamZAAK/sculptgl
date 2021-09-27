@@ -14,7 +14,7 @@ var draggableElems = document.querySelectorAll('.draggable');
 // array of Draggabillies
 var draggies = []
 var eyeURLs = ['resources/eyes/1.png', 'resources/eyes/2.png', 'resources/eyes/3.png', 'resources/eyes/4.png', 'resources/eyes/5.png', 'resources/eyes/6.png']
-
+var trashbutton = document.getElementById("trashbutton");
 
 window.addEventListener('resize', onWindowResize);
 
@@ -26,7 +26,6 @@ window.addEventListener('load', function() {
 
     app._background.loadBackgroundURL("resources/bg.png");
 
-
     registerDropdowns(document.getElementsByClassName("dropdownButton"));
     trash = document.getElementById("trash");
 
@@ -37,6 +36,8 @@ window.addEventListener('load', function() {
         makeeye(i, eye);
         eyeEmpty[i] = false;
     }
+
+    trashbutton = document.getElementById("trashbutton");
 
     setInterval(onTimerTick, 33); // 33 milliseconds = ~ 30 frames per sec
 
@@ -65,8 +66,15 @@ function registerDropdowns(acc) {
         });
 
         var panel = acc[d].nextElementSibling;
+        console.log(acc[d].innerText);
+        if (acc[d].innerText == "Werkzeuge" || acc[d].innerText == "Tools") {
+            acc[d].classList.toggle("active");
+            panel.style.maxHeight = null;
+            console.log("ha");
+        } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
 
-        panel.style.maxHeight = panel.scrollHeight + "px";
+        }
     }
 }
 
@@ -111,10 +119,18 @@ function makeeye(i, eye) {
         }
 
         //Show Trash
-        trash.style.bottom = '0px';
+        trash.style.bottom = '1rem';
 
     });
 
+    draggie.on('dragMove', function(event, pointer, moveVector) {
+        if (pointer.pageY > window.innerHeight - 100 && pointer.pageX > window.innerWidth / 2 - 50 && pointer.pageX < window.innerWidth / 2 + 50) {
+            trashbutton.style.backgroundColor = "#ff003e";
+        } else {
+            trashbutton.style.backgroundColor = "#e9e9e9";
+        }
+
+    });
 
     draggie.on('dragEnd', function(event, pointer) {
 
@@ -133,12 +149,11 @@ function makeeye(i, eye) {
                 eyeEmpty[id] = true;
             }
 
-            if (pointer.pageY > window.innerHeight - 100) {
-                console.log(pointer);
+            if (pointer.pageY > window.innerHeight - 100 && pointer.pageX > window.innerWidth / 2 - 50 && pointer.pageX < window.innerWidth / 2 + 50) {
                 event.srcElement.style.opacity = '0';
             }
         }
-        console.log(trash);
+
         trash.style.bottom = '-100px';
 
     });
@@ -176,25 +191,12 @@ function Drag() {
     app._sculptManager.selectionChanged(app._mainObj);
 }
 
-// function Eye(id) {
-//     // app.addPlane(id);
-//     // app._sculptManager.setToolIndex(12);
-
-//     // init Draggabillies
-
-//     var draggie = new Draggabilly(createEye(id), {
-//         // options...
-//     });
-//     draggies.push(draggie);
-//     draggie.setPosition(500, 500);
-
-// }
 
 function createEye(id, parent) {
     let elem = document.createElement("div");
     let img = document.createElement("img");
 
-    let eyeSize = '60px';
+    let eyeSize = '95px';
 
     img.src = eyeURLs[id];
     img.style.width = eyeSize;
@@ -202,7 +204,7 @@ function createEye(id, parent) {
     img.style.position = "flexible";
 
     elem.appendChild(img);
-    elem.style.display = "absolute";
+    // elem.style.display = "contents";
     elem.style.pointerEvents = 'all';
     elem.style.width = eyeSize;
     elem.style.height = eyeSize;
@@ -236,11 +238,21 @@ function takeScreenshot() {
 
     app.screenshot();
     html2canvas(document.getElementById('viewport')).then(canvas => {
-        var img = new Image();
         // Without 'preserveDrawingBuffer' set to true, we must render now
         // img.src = canvas.toDataURL();
+
+
+        // open in new window like this
+        var w = window.open('', '');
+        w.document.title = "Screenshot";
+        var img = new Image();
+        // // Without 'preserveDrawingBuffer' set to true, we must render now
+        img.src = canvas.toDataURL();
+        w.document.body.appendChild(img);
+
+
         console.log(canvas);
-        save(canvas.toDataURL());
+        // save(canvas.toDataURL());
     });
     app.render();
 }

@@ -144,29 +144,20 @@
             background-position: center;
         }
 
-        @media (max-width: 600px) {
-            #formular {
-                width: 100%;
-                padding: 1.5rem 1rem;
-                right: calc(-100% - 5rem);
-            }
+        @font-face {
+            font-family: 'Scotch Genovese';
+            src: url('ScotchGenovese-Book.woff2') format('woff2'), url('ScotchGenovese-Book.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
         }
 
         @font-face {
             font-family: 'Monument Grotesk';
-            src: url('fonts/MonumentGrotesk-Medium.woff2') format('woff2'), url('fonts/MonumentGrotesk-Medium.woff') format('woff');
+            src: url('MonumentGrotesk-Medium.woff2') format('woff2'), url('MonumentGrotesk-Medium.woff') format('woff');
             font-weight: 500;
             font-style: normal;
-        }
-
-        ::selection {
-            background: #00ed33;
-            color: #000;
-        }
-
-        ::-moz-selection {
-            background: #00ed33;
-            color: #000;
+            font-display: swap;
         }
 
         body {
@@ -186,23 +177,28 @@
         }
 
         h2 {
-            border-radius: 10px;
-            /* background-color: white; */
-            font-family: 'Monument Grotesk';
-            text-align: center;
-            padding: 5px 10px;
-            margin: 10px;
+            /* border-radius: .25rem;
+    /* background-color: white; 
+    font-family: 'Monument Grotesk';
+    text-align: center;
+    padding: 5px 10px;
+    margin: 10px;
+    */
         }
 
         button {
+            padding: .15rem .65rem;
+            border: none;
+            /* margin: 1rem 0 0; */
+            border-radius: .25rem;
+            font-size: inherit;
+            cursor: pointer;
             font-family: 'Monument Grotesk';
-            letter-spacing: .1rem;
-            border-radius: 10px;
-            font-size: 24px;
-            background-color: white;
-            border-style: none;
-            text-align: center;
-            padding: 5px 10px;
+            background-color: #e9e5ef;
+        }
+
+        button:hover {
+            background-color: #ff003e;
         }
 
         .active,
@@ -216,13 +212,13 @@
             height: auto;
         }
 
+        .iconmini {
+            width: 75%;
+            height: auto;
+        }
+
         .trash {
-            width: 100px;
-            height: 100px;
-            bottom: -100px;
-            left: 45%;
-            right: 0;
-            position: fixed;
+            left: 47%;
             transition: bottom 0.2s ease-out;
         }
 
@@ -235,35 +231,71 @@
         }
 
         .selectable {
-            background: url('resources/ui/bg.png') no-repeat;
+            padding: 0;
+            background: url(resources/ui/bg.png) no-repeat;
             background-size: 100%;
-            width: 100px;
-            height: 100px;
-            min-height: 100px;
+            width: 95px;
+            height: 95px;
+            min-height: 95px;
+            margin: 5px;
+        }
+
+        .selectable:hover {
+            background: url(resources/ui/bg_red.png) no-repeat;
+            background-size: 100%;
+            width: 95px;
+            height: 95px;
+            min-height: 95px;
         }
 
         .dropdownButton {
-            background-color: #ffffff;
-            width: 160px;
+            background-color: #e9e9e9;
+            width: 100%;
+            /* margin: 0 0 .2rem; */
+            /* margin: 1rem; */
         }
 
         .dropdown {
             display: flex;
             flex-direction: column;
-            margin: 10px;
+            align-items: center;
+            /* width: 160px; */
+            /* margin: 10px; */
+            /* pointer-events: none; */
             padding: 0 18px;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.2s ease-out;
         }
 
-        .lefttop {
-            position: fixed;
-            left: 0px;
-            top: 0px;
-            margin: 10px;
+        .circle {
+            border-radius: 100%;
+            width: 4rem;
+            height: 4rem;
+        }
+
+        .left {
+            left: 1rem;
             display: flex;
             flex-direction: column;
+        }
+
+        .menu {
+            width: 8rem;
+            position: fixed;
+            /* margin: 1rem; */
+        }
+
+        .top {
+            top: 1rem;
+        }
+
+        .right {
+            right: 1rem;
+        }
+
+        .bottom {
+            bottom: 1rem;
         }
 
         @media all and (max-width: 1000px) {
@@ -293,25 +325,24 @@
     <div id='viewport' onclick='toggleForm("none")'>
         <div id="eyeport" style="position:fixed;z-index: 1000;width: 100%;height: 100%; pointer-events: none;"></div>
         <canvas id='canvas'></canvas>
-
     </div>
     <div class="tools">
-        <div class="lefttop">
-            <div style="margin:10px;">
+        <div class="menu left top">
+            <div style="   margin-bottom: 1rem;">
                 <button class="dropdownButton">Werkzeuge</button>
                 <div class="dropdown">
                     <button class="selectable" onclick='Paint()'>
-                        <image class="icon" src="resources/ui/pull.png"></image>
+                        <image class="iconmini" src="resources/ui/pull.png"></image>
                     </button>
                     <button class="selectable" onclick='Crease()'>
-                        <image class="icon" src="resources/ui/push.png"></image>
+                        <image class="iconmini" src="resources/ui/push.png"></image>
                     </button>
                     <button class="selectable" onclick='Drag()'>
-                        <image class="icon" src="resources/ui/pinch.png"></image>
+                        <image class="iconmini" src="resources/ui/pinch.png"></image>
                     </button>
                 </div>
             </div>
-            <div style="margin:10px;">
+            <div>
                 <button class="dropdownButton">Textur</button>
                 <div class="dropdown">
                     <button class="selectable" onclick="LoadTexture('resources/bg.png', 0)">
@@ -326,13 +357,13 @@
                 </div>
             </div>
         </div>
-        <div class="leftbottom" style="position:fixed; bottom:0px;">
-            <h2> <button style="border-radius: 100%; width:80px;" onclick='Undo()'>
-                    <image class="icon" src="resources/ui/back.png"></image>
-                </button></h2>
+        <div class="menu left bottom" style="left:3rem">
+            <button class="circle" onclick='Undo()'>
+                <image class="icon" src="resources/ui/back.png"></image>
+            </button>
         </div>
-        <div class="righttop" style="position:fixed; right:0px;top:10px;">
-            <div style="margin:10px;">
+        <div class="menu right top">
+            <div>
                 <button class="dropdownButton">Drag & Drop</button>
                 <div class="dropdown">
                     <button class="selectable" id="eye">
@@ -350,12 +381,14 @@
                 </div>
             </div>
         </div>
-        <div class="rightbottom" style="position:fixed; right:0px;bottom:0px;">
-            <h2> <button id="fertig" style="width:140px;" onclick='toggleForm("in");takeScreenshot();'>Fertig?</button></h2>
+        <div class="menu right bottom" style="width:unset">
+            <button id="fertig" onclick='toggleForm("in ");'>Fertig?</button>
         </div>
 
-        <div class="trash" id="trash">
-            <image class="icon" src="resources/ui/trash.jpg"></image>
+        <div class="menu trash bottom" id="trash">
+            <button class="circle" id="trashbutton">
+                <image class="icon" src="resources/ui/Tool_Augen-loeschen.png "></image>
+            </button>
         </div>
     </div>
     <div id="formular">

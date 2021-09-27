@@ -31,23 +31,28 @@ body {
 }
 
 h2 {
-    border-radius: 10px;
-    /* background-color: white; */
+    /* border-radius: .25rem;
+    /* background-color: white; 
     font-family: 'Monument Grotesk';
     text-align: center;
     padding: 5px 10px;
     margin: 10px;
+    */
 }
 
 button {
+    padding: .15rem .65rem;
+    border: none;
+    /* margin: 1rem 0 0; */
+    border-radius: .25rem;
+    font-size: inherit;
+    cursor: pointer;
     font-family: 'Monument Grotesk';
-    letter-spacing: .1rem;
-    border-radius: 10px;
-    font-size: 24px;
-    background-color: white;
-    border-style: none;
-    text-align: center;
-    padding: 5px 10px;
+    background-color: #e9e5ef;
+}
+
+button:hover {
+    background-color: #ff003e;
 }
 
 .active,
@@ -61,13 +66,13 @@ button:hover,
     height: auto;
 }
 
+.iconmini {
+    width: 75%;
+    height: auto;
+}
+
 .trash {
-    width: 100px;
-    height: 100px;
-    bottom: 0;
-    left: 45%;
-    right: 0;
-    position: fixed;
+    left: 47%;
     transition: bottom 0.2s ease-out;
 }
 
@@ -80,23 +85,36 @@ img {
 }
 
 .selectable {
+    padding: 0;
     background: url(../resources/ui/bg.png) no-repeat;
     background-size: 100%;
-    width: 100px;
-    height: 100px;
-    min-height: 100px;
+    width: 95px;
+    height: 95px;
+    min-height: 95px;
+    margin: 5px;
+}
+
+.selectable:hover {
+    background: url(../resources/ui/bg_red.png) no-repeat;
+    background-size: 100%;
+    width: 95px;
+    height: 95px;
+    min-height: 95px;
 }
 
 .dropdownButton {
-    background-color: #ffffff;
-    width: 160px;
+    background-color: #e9e9e9;
+    width: 100%;
+    /* margin: 0 0 .2rem; */
+    /* margin: 1rem; */
 }
 
 .dropdown {
     display: flex;
     flex-direction: column;
+    align-items: center;
     /* width: 160px; */
-    margin: 10px;
+    /* margin: 10px; */
     /* pointer-events: none; */
     padding: 0 18px;
     max-height: 0;
@@ -104,13 +122,34 @@ img {
     transition: max-height 0.2s ease-out;
 }
 
-.lefttop {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    margin: 10px;
+.circle {
+    border-radius: 100%;
+    width: 4rem;
+    height: 4rem;
+}
+
+.left {
+    left: 1rem;
     display: flex;
     flex-direction: column;
+}
+
+.menu {
+    width: 8rem;
+    position: fixed;
+    /* margin: 1rem; */
+}
+
+.top {
+    top: 1rem;
+}
+
+.right {
+    right: 1rem;
+}
+
+.bottom {
+    bottom: 1rem;
 }
 
 @media all and (max-width: 1000px) {

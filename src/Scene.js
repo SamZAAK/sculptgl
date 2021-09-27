@@ -294,7 +294,7 @@ class Scene {
 
         gl.enable(gl.DEPTH_TEST);
 
-        this._sculptManager.postRender(); // draw sculpting gizmo stuffs
+        // this._sculptManager.postRender(); // draw sculpting gizmo stuffs
         // open in new window like this
         // var w = window.open('', '');
         // w.document.title = "Screenshot";
@@ -312,9 +312,11 @@ class Scene {
         var meshes = this._meshes;
         var nbMeshes = meshes.length;
 
+
         ///////////////
         // CONTOUR 1/2
         ///////////////
+
         gl.disable(gl.DEPTH_TEST);
         var showContour = this._selectMeshes.length > 0 && this._showContour && ShaderLib[Enums.Shader.CONTOUR].color[3] > 0.0;
         if (showContour) {
@@ -325,14 +327,18 @@ class Scene {
         }
         gl.enable(gl.DEPTH_TEST);
 
+
         ///////////////
         // OPAQUE PASS
         ///////////////
+
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttOpaque.getFramebuffer());
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+
         // grid
         if (this._showGrid) this._grid.render(this);
+
 
         // (post opaque pass)
         for (i = 0; i < nbMeshes; ++i) {
@@ -342,46 +348,54 @@ class Scene {
         var startTransparent = i;
         if (this._meshPreview) this._meshPreview.render(this);
 
+
         // background
-        if (bg) this._background.render();
+        if (bg) {
+            this._background.render();
 
-        ///////////////
-        // TRANSPARENT PASS
-        ///////////////
-        gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
-        gl.clear(gl.COLOR_BUFFER_BIT);
+            ///////////////
+            // TRANSPARENT PASS
+            ///////////////
+            gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
+            gl.clear(gl.COLOR_BUFFER_BIT);
 
-        gl.enable(gl.BLEND);
+            gl.enable(gl.BLEND);
 
-        // wireframe for dynamic mesh has duplicate edges
-        gl.depthFunc(gl.LESS);
-        for (i = 0; i < nbMeshes; ++i) {
-            if (meshes[i].getShowWireframe())
-                meshes[i].renderWireframe(this);
+            // wireframe for dynamic mesh has duplicate edges
+            gl.depthFunc(gl.LESS);
+            for (i = 0; i < nbMeshes; ++i) {
+                if (meshes[i].getShowWireframe())
+                    meshes[i].renderWireframe(this);
+            }
+            gl.depthFunc(gl.LEQUAL);
+
+            gl.depthMask(true);
+            gl.enable(gl.CULL_FACE);
+
+            for (i = startTransparent; i < nbMeshes; ++i) {
+                gl.cullFace(gl.FRONT); // draw back first
+                meshes[i].render(this);
+                gl.cullFace(gl.BACK); // ... and then front
+                meshes[i].render(this);
+            }
+
+            gl.disable(gl.CULL_FACE);
+
+            ///////////////
+            // CONTOUR 2/2
+            ///////////////
+            if (showContour) {
+                this._rttContour.render(this);
+            }
+
+            gl.depthMask(true);
+            gl.disable(gl.BLEND);
         }
-        gl.depthFunc(gl.LEQUAL);
 
-        gl.depthMask(false);
-        gl.enable(gl.CULL_FACE);
+        // gl.clearColor(1, 1, 1, 1);
+        // gl.colorMask(false, false, false, true);
+        // gl.clear(gl.COLOR_BUFFER_BIT);
 
-        for (i = startTransparent; i < nbMeshes; ++i) {
-            gl.cullFace(gl.FRONT); // draw back first
-            meshes[i].render(this);
-            gl.cullFace(gl.BACK); // ... and then front
-            meshes[i].render(this);
-        }
-
-        gl.disable(gl.CULL_FACE);
-
-        ///////////////
-        // CONTOUR 2/2
-        ///////////////
-        if (showContour) {
-            this._rttContour.render(this);
-        }
-
-        gl.depthMask(true);
-        gl.disable(gl.BLEND);
     }
 
     /** Pre compute matrices and sort meshes */
@@ -405,7 +419,7 @@ class Scene {
     initWebGL() {
         var attributes = {
             antialias: false,
-            stencil: true
+            stencil: true,
         };
 
         var canvas = document.getElementById('canvas');

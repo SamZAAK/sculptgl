@@ -6,8 +6,8 @@ class Inflate extends SculptBase {
     constructor(main) {
         super(main);
 
-        this._radius = 80;
-        this._intensity = 0.2;
+        this._radius = 80; //80
+        this._intensity = 0.4; //0.2
         this._negative = false;
         this._culling = false;
         this._idAlpha = 0;
