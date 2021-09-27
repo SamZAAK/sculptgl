@@ -289,8 +289,13 @@ class Scene {
 
         // render to screen
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-
         this._rttOpaque.render(this); // fxaa
+
+        //transp
+        // this._rttTransparent = new Rtt(this._gl, null, this._rttOpaque.getDepth(), true);
+
+        // gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
+        // this._rttTransparent.render(this);
 
         gl.enable(gl.DEPTH_TEST);
 
@@ -312,26 +317,25 @@ class Scene {
         var meshes = this._meshes;
         var nbMeshes = meshes.length;
 
-
         ///////////////
         // CONTOUR 1/2
         ///////////////
 
-        gl.disable(gl.DEPTH_TEST);
+        // gl.disable(gl.DEPTH_TEST);
         var showContour = this._selectMeshes.length > 0 && this._showContour && ShaderLib[Enums.Shader.CONTOUR].color[3] > 0.0;
-        if (showContour) {
-            gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttContour.getFramebuffer());
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            for (var s = 0, sel = this._selectMeshes, nbSel = sel.length; s < nbSel; ++s)
-                sel[s].renderFlatColor(this);
-        }
-        gl.enable(gl.DEPTH_TEST);
+        // if (showContour) {
+        //     gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttContour.getFramebuffer());
+        //     gl.clear(gl.COLOR_BUFFER_BIT);
+        //     for (var s = 0, sel = this._selectMeshes, nbSel = sel.length; s < nbSel; ++s)
+        //         sel[s].renderFlatColor(this);
+        // }
+        // gl.enable(gl.DEPTH_TEST);
 
 
         ///////////////
         // OPAQUE PASS
         ///////////////
-
+        gl.depthMask(true);
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttOpaque.getFramebuffer());
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -351,46 +355,56 @@ class Scene {
 
         // background
         if (bg) {
+            // if (this._background._texture == null) {
+            //     this._background.loadBackgroundURL("resources/bg.png");
+
+            // }
             this._background.render();
-
-            ///////////////
-            // TRANSPARENT PASS
-            ///////////////
-            gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
-            gl.clear(gl.COLOR_BUFFER_BIT);
-
-            gl.enable(gl.BLEND);
-
-            // wireframe for dynamic mesh has duplicate edges
-            gl.depthFunc(gl.LESS);
-            for (i = 0; i < nbMeshes; ++i) {
-                if (meshes[i].getShowWireframe())
-                    meshes[i].renderWireframe(this);
-            }
-            gl.depthFunc(gl.LEQUAL);
-
-            gl.depthMask(true);
-            gl.enable(gl.CULL_FACE);
-
-            for (i = startTransparent; i < nbMeshes; ++i) {
-                gl.cullFace(gl.FRONT); // draw back first
-                meshes[i].render(this);
-                gl.cullFace(gl.BACK); // ... and then front
-                meshes[i].render(this);
-            }
-
-            gl.disable(gl.CULL_FACE);
-
-            ///////////////
-            // CONTOUR 2/2
-            ///////////////
-            if (showContour) {
-                this._rttContour.render(this);
-            }
-
-            gl.depthMask(true);
-            gl.disable(gl.BLEND);
+        } else {
+            this._background.deleteTexture();
+            this._background.createOnePixelTexture(0, 0, 0, 0);
+            this._background.render();
         }
+
+        ///////////////
+        // TRANSPARENT PASS
+        ///////////////
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        gl.enable(gl.BLEND);
+
+        // wireframe for dynamic mesh has duplicate edges
+        gl.depthFunc(gl.LESS);
+        for (i = 0; i < nbMeshes; ++i) {
+            if (meshes[i].getShowWireframe())
+                meshes[i].renderWireframe(this);
+        }
+        gl.depthFunc(gl.LEQUAL);
+
+
+        gl.enable(gl.CULL_FACE);
+
+        for (i = startTransparent; i < nbMeshes; ++i) {
+            gl.cullFace(gl.FRONT); // draw back first
+            meshes[i].render(this);
+            gl.cullFace(gl.BACK); // ... and then front
+            meshes[i].render(this);
+        }
+
+        gl.disable(gl.CULL_FACE);
+
+        ///////////////
+        // CONTOUR 2/2
+        ///////////////
+        // if (showContour) {
+        //     this._rttContour.render(this);
+        // }
+
+
+        gl.depthMask(true);
+        gl.disable(gl.BLEND);
+
     }
 
     /** Pre compute matrices and sort meshes */
