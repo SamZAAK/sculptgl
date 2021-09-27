@@ -391,11 +391,6 @@ class Scene {
             gl.depthMask(true);
             gl.disable(gl.BLEND);
         }
-
-        // gl.clearColor(1, 1, 1, 1);
-        // gl.colorMask(false, false, false, true);
-        // gl.clear(gl.COLOR_BUFFER_BIT);
-
     }
 
     /** Pre compute matrices and sort meshes */
