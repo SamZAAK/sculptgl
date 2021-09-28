@@ -234,18 +234,18 @@
             padding: 0;
             background: url(resources/ui/bg.png) no-repeat;
             background-size: 100%;
-            width: 95px;
-            height: 95px;
-            min-height: 95px;
+            width: 4rem;
+            height: 4rem;
+            min-height: 4rem;
             margin: 5px;
         }
 
         .selectable:hover {
             background: url(resources/ui/bg_red.png) no-repeat;
             background-size: 100%;
-            width: 95px;
-            height: 95px;
-            min-height: 95px;
+            width: 4rem;
+            height: 4rem;
+            min-height: 4rem;
         }
 
         .dropdownButton {
@@ -270,8 +270,8 @@
 
         .circle {
             border-radius: 100%;
-            width: 4rem;
-            height: 4rem;
+            width: 3rem;
+            height: 3rem;
         }
 
         .left {
@@ -283,6 +283,7 @@
         .menu {
             width: 8rem;
             position: fixed;
+            gap: 1rem;
             /* margin: 1rem; */
         }
 
@@ -299,13 +300,27 @@
         }
 
         @media all and (max-width: 1000px) {
-            .lefttop {
+
+            html{
+                font-size: 1rem;
+            }
+
+            .menu{
+                width:unset;
+            }
+
+
+            .left.top {
                 flex-direction: row;
             }
 
             .dropdown {
                 padding: 0 18px;
                 overflow: hidden;
+            }
+
+            .dropdownButton{
+                width: unset;
             }
         }
     </style>
@@ -328,7 +343,7 @@
     </div>
     <div class="tools">
         <div class="menu left top">
-            <div style="   margin-bottom: 1rem;">
+            <div>
                 <button class="dropdownButton">Werkzeuge</button>
                 <div class="dropdown">
                     <button class="selectable" onclick='Paint()'>

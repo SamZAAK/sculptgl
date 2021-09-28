@@ -24,6 +24,8 @@ window.addEventListener('load', function() {
     app = new window.SculptGL();
     app.start();
 
+    // app._background.loadBackgroundURL("resources/ui/empty.png");
+
     app._background.loadBackgroundURL("resources/bg.png");
 
     registerDropdowns(document.getElementsByClassName("dropdownButton"));
@@ -38,6 +40,10 @@ window.addEventListener('load', function() {
     }
 
     trashbutton = document.getElementById("trashbutton");
+
+    app._sculptManager.setToolIndex(1);
+    app._sculptManager.setTempToolIndex(1);
+    app._sculptManager.selectionChanged(app._mainObj);
 
     setInterval(onTimerTick, 33); // 33 milliseconds = ~ 30 frames per sec
 
@@ -66,14 +72,20 @@ function registerDropdowns(acc) {
         });
 
         var panel = acc[d].nextElementSibling;
-        console.log(acc[d].innerText);
-        if (acc[d].innerText == "Werkzeuge" || acc[d].innerText == "Tools") {
+        console.log(window.innerWidth);
+        if (window.innerWidth < 1000) {
             acc[d].classList.toggle("active");
             panel.style.maxHeight = null;
-            console.log("ha");
         } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
 
+            if (acc[d].innerText == "Werkzeuge" || acc[d].innerText == "Tools") {
+                acc[d].classList.toggle("active");
+                panel.style.maxHeight = null;
+
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+
+            }
         }
     }
 }
@@ -110,7 +122,7 @@ function makeeye(i, eye) {
 
             self.addedToEye++;
             console.log(self.addedToEye);
-            this.setPosition(pointer.clientX, pointer.clientY - self.addedToEye * 60);
+            this.setPosition(pointer.clientX - 95 / 2, pointer.clientY - self.addedToEye * 95 + 95 / 2);
 
             // event.srcElement.style.left = pointer.clientX + "px";
             // event.srcElement.style.bottom = pointer.clientY + "px";
@@ -122,6 +134,12 @@ function makeeye(i, eye) {
         trash.style.bottom = '1rem';
 
     });
+    draggie.on('pointerUp', function(event, pointer) {
+        trash.style.bottom = '-100px';
+
+    });
+
+
 
     draggie.on('dragMove', function(event, pointer, moveVector) {
         if (pointer.pageY > window.innerHeight - 100 && pointer.pageX > window.innerWidth / 2 - 50 && pointer.pageX < window.innerWidth / 2 + 50) {
@@ -154,7 +172,6 @@ function makeeye(i, eye) {
             }
         }
 
-        trash.style.bottom = '-100px';
 
     });
 }
@@ -196,7 +213,7 @@ function createEye(id, parent) {
     let elem = document.createElement("div");
     let img = document.createElement("img");
 
-    let eyeSize = '95px';
+    let eyeSize = '4rem';
 
     img.src = eyeURLs[id];
     img.style.width = eyeSize;
@@ -206,8 +223,8 @@ function createEye(id, parent) {
     elem.appendChild(img);
     // elem.style.display = "contents";
     elem.style.pointerEvents = 'all';
-    elem.style.width = eyeSize;
-    elem.style.height = eyeSize;
+    elem.style.width = '100%';
+    elem.style.height = 'auto';
     elem.id = id;
 
 
@@ -230,7 +247,7 @@ function Undo() {
 }
 
 function toggleForm(value) {
-    document.getElementById("formular").style.display = value;
+    document.getElementById("formular").classList.toggle(value);
 }
 
 function replaceColor(_canvas) {
@@ -274,7 +291,8 @@ function replaceColor(_canvas) {
     // ctx.putImageData(imageData, 0, 0);
 
     // open in new window like this
-    var w = window.open('', '');
+  
+   var w = window.open('', '');
     w.document.title = "Screenshot";
     var img = new Image();
     // // Without 'preserveDrawingBuffer' set to true, we must render now
@@ -289,17 +307,11 @@ function takeScreenshot() {
         // Without 'preserveDrawingBuffer' set to true, we must render now
         // img.src = canvas.toDataURL();
 
-        replaceColor(canvas);
-
-
-
-
-
-
-
-        // save(canvas.toDataURL());
+        // replaceColor(canvas); VON JONAS AUSGEBLENDET
+  save(canvas.toDataURL());
     });
-    app.render();
+app.render();
+   
 }
 
 

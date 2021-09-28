@@ -9,7 +9,7 @@ ShaderPBR.vertexName = ShaderPBR.fragmentName = 'ShadingPBR';
 var eyePath = 'resources/eyes/';
 
 ShaderPBR.textures = [{
-        path: eyePath + '1.png'
+        path: 'resources/matcaps/fuck4.png',
     }, {
         path: eyePath + '2.png'
     },
@@ -194,7 +194,7 @@ ShaderPBR.updateUniforms = function(mesh, main) {
     gl.uniform1f(uniforms.uExposure, ShaderPBR.exposure);
 
     var env = ShaderPBR.environments[ShaderPBR.idEnv];
-    var img = ShaderPBR.textures[mesh.getMatcap()];
+    var img = ShaderPBR.textures[0];
 
     gl.uniform3fv(uniforms.uSPH, env.sph);
     if (env.size) gl.uniform2fv(uniforms.uEnvSize, env.size);

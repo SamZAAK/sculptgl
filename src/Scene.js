@@ -322,7 +322,7 @@ class Scene {
         ///////////////
 
         // gl.disable(gl.DEPTH_TEST);
-        var showContour = this._selectMeshes.length > 0 && this._showContour && ShaderLib[Enums.Shader.CONTOUR].color[3] > 0.0;
+        // var showContour = this._selectMeshes.length > 0 && this._showContour && ShaderLib[Enums.Shader.CONTOUR].color[3] > 0.0;
         // if (showContour) {
         //     gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttContour.getFramebuffer());
         //     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -335,22 +335,31 @@ class Scene {
         ///////////////
         // OPAQUE PASS
         ///////////////
+        // gl.colorMask(true, true, true, false);
+
+
         gl.depthMask(true);
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttOpaque.getFramebuffer());
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
         // grid
-        if (this._showGrid) this._grid.render(this);
+        // if (this._showGrid) this._grid.render(this);
 
 
         // (post opaque pass)
         for (i = 0; i < nbMeshes; ++i) {
+            console.log(meshes[i]);
             if (meshes[i].isTransparent()) break;
             meshes[i].render(this);
         }
         var startTransparent = i;
-        if (this._meshPreview) this._meshPreview.render(this);
+        // if (this._meshPreview) this._meshPreview.render(this);
+        gl.enable(gl.BLEND);
+
+        this._background.render();
+
+        gl.disable(gl.BLEND);
 
 
         // background
@@ -359,40 +368,43 @@ class Scene {
             //     this._background.loadBackgroundURL("resources/bg.png");
 
             // }
-            this._background.render();
         } else {
-            this._background.deleteTexture();
-            this._background.createOnePixelTexture(0, 0, 0, 0);
-            this._background.render();
+            // this._background.deleteTexture();
+            // this._background.createOnePixelTexture(0, 0, 0, 0);
+            // this._background.render();
         }
+        // Set the backbuffer's alpha to 1.0
+
+        // gl.clearColor(0, 0, 0, 0);
+        // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         ///////////////
         // TRANSPARENT PASS
         ///////////////
-        gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
-        gl.clear(gl.COLOR_BUFFER_BIT);
+        // gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
+        // gl.clear(gl.COLOR_BUFFER_BIT);
 
-        gl.enable(gl.BLEND);
+        // gl.enable(gl.BLEND);
 
-        // wireframe for dynamic mesh has duplicate edges
-        gl.depthFunc(gl.LESS);
-        for (i = 0; i < nbMeshes; ++i) {
-            if (meshes[i].getShowWireframe())
-                meshes[i].renderWireframe(this);
-        }
-        gl.depthFunc(gl.LEQUAL);
+        // // wireframe for dynamic mesh has duplicate edges
+        // gl.depthFunc(gl.LESS);
+        // for (i = 0; i < nbMeshes; ++i) {
+        //     if (meshes[i].getShowWireframe())
+        //         meshes[i].renderWireframe(this);
+        // }
+        // gl.depthFunc(gl.LEQUAL);
 
 
-        gl.enable(gl.CULL_FACE);
+        // gl.enable(gl.CULL_FACE);
 
-        for (i = startTransparent; i < nbMeshes; ++i) {
-            gl.cullFace(gl.FRONT); // draw back first
-            meshes[i].render(this);
-            gl.cullFace(gl.BACK); // ... and then front
-            meshes[i].render(this);
-        }
+        // for (i = startTransparent; i < nbMeshes; ++i) {
+        //     gl.cullFace(gl.FRONT); // draw back first
+        //     meshes[i].render(this);
+        //     gl.cullFace(gl.BACK); // ... and then front
+        //     meshes[i].render(this);
+        // }
 
-        gl.disable(gl.CULL_FACE);
+        // gl.disable(gl.CULL_FACE);
 
         ///////////////
         // CONTOUR 2/2
@@ -402,8 +414,8 @@ class Scene {
         // }
 
 
-        gl.depthMask(true);
-        gl.disable(gl.BLEND);
+        // gl.depthMask(true);
+        // gl.disable(gl.BLEND);
 
     }
 
@@ -428,7 +440,8 @@ class Scene {
     initWebGL() {
         var attributes = {
             antialias: false,
-            stencil: true,
+            stencil: false,
+            alpha: true
         };
 
         var canvas = document.getElementById('canvas');
@@ -480,10 +493,12 @@ class Scene {
                     self._mainObj.setShaderType(Enums.Shader.MATCAP);
                     self._mainObj.setMatcap(idMaterial + 2);
                 } else if (idMaterial == 1) {
-                    self._mainObj.setShaderType(Enums.Shader.PBR);
-                    ShaderPBR.idEnv = 2;
+                    // self._mainObj.setShaderType(Enums.Shader.PBR);
+                    // ShaderPBR.idEnv = 2;
 
-                    ShaderPBR.idTex = 2;
+                    // ShaderPBR.idTex = 2;
+                    self._mainObj.setShaderType(Enums.Shader.MATCAP);
+                    self._mainObj.setMatcap(idMaterial + 2);
 
                 } else if (idMaterial == 2) {
                     self._mainObj.setShaderType(Enums.Shader.MATCAP);

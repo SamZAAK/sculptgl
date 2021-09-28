@@ -23,10 +23,10 @@ ShaderMatcap.matcaps = [{
     path: texPath + 'redClay.jpg',
     name: 'Red clay' // too lazy to tr
 }, {
-    path: texPath + 'skinHazardousarts.jpg',
+    path: texPath + 'fuck2.png', //'skinHazardousarts.jpg',
     name: 'Skin hazardousarts' // too lazy to tr
 }, {
-    path: texPath + 'skinHazardousarts2.jpg',
+    path: texPath + 'fuck5.png',
     name: 'Skin Hazardousarts2' // too lazy to tr
 }, {
     path: texPath + 'pearl.jpg',
@@ -38,7 +38,7 @@ ShaderMatcap.matcaps = [{
     path: texPath + 'skin.jpg',
     name: TR('matcapSkin')
 }, {
-    path: texPath + 'green.jpg',
+    path: texPath + 'fuck.png',
     name: TR('matcapGreen')
 }, {
     path: texPath + 'white.jpg',
