@@ -218,7 +218,7 @@
         }
 
         .trash {
-            left: 47%;
+            left: 50%-4rem;
             transition: bottom 0.2s ease-out;
         }
 

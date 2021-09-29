@@ -7,6 +7,8 @@ var eyeEmpty = [];
 var trash;
 var addedToEye = 0;
 var allEyes;
+var eyeSize = '4.2rem';
+var allTools;
 
 // if you have multiple .draggable elements
 // get all draggie elements
@@ -15,6 +17,7 @@ var draggableElems = document.querySelectorAll('.draggable');
 var draggies = []
 var eyeURLs = ['resources/eyes/1.png', 'resources/eyes/2.png', 'resources/eyes/3.png', 'resources/eyes/4.png', 'resources/eyes/5.png', 'resources/eyes/6.png']
 var trashbutton = document.getElementById("trashbutton");
+allTools = document.getElementsByClassName("iconmini")
 
 window.addEventListener('resize', onWindowResize);
 
@@ -41,25 +44,36 @@ window.addEventListener('load', function() {
 
     trashbutton = document.getElementById("trashbutton");
 
+    centerTrash();
+
     app._sculptManager.setToolIndex(1);
     app._sculptManager.setTempToolIndex(1);
     app._sculptManager.selectionChanged(app._mainObj);
+
+    deactivateToolButtons(0);
+
 
     setInterval(onTimerTick, 33); // 33 milliseconds = ~ 30 frames per sec
 
 });
 
 function onWindowResize() {
-    console.log(window.innerWidth);
     for (var i = 0; i < draggies.length; i++) {
         var elem = draggies[i];
 
-        console.log(elem.position.x / window.innerWidth + " and " + elem.position.y / window.innerHeight);
+        // console.log(elem.position.x / window.innerWidth + " and " + elem.position.y / window.innerHeight);
     }
+
+    centerTrash();
+}
+
+function centerTrash() {
+    var centerTrash = window.innerWidth / 2 - 30;
+    document.getElementById('trash').style.left = centerTrash + 'px';
+
 }
 
 function registerDropdowns(acc) {
-    console.log(acc.length);
     for (let d = 0; d < acc.length; d++) {
         acc[d].addEventListener("click", function() {
             this.classList.toggle("active");
@@ -78,14 +92,14 @@ function registerDropdowns(acc) {
             panel.style.maxHeight = null;
         } else {
 
-            if (acc[d].innerText == "Werkzeuge" || acc[d].innerText == "Tools") {
-                acc[d].classList.toggle("active");
-                panel.style.maxHeight = null;
+            // if (acc[d].innerText == "Werkzeuge" || acc[d].innerText == "Tools") {
+            //     acc[d].classList.toggle("active");
+            //     panel.style.maxHeight = null;
 
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + "px";
+            // } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
 
-            }
+            // }
         }
     }
 }
@@ -189,6 +203,7 @@ function Paint() {
     app._sculptManager.setTempToolIndex(1);
     app._sculptManager.selectionChanged(app._mainObj);
 
+    deactivateToolButtons(0);
 }
 
 function Crease() {
@@ -198,6 +213,7 @@ function Crease() {
     app._sculptManager.setTempToolIndex(6);
     app._sculptManager.selectionChanged(app._mainObj);
 
+    deactivateToolButtons(1);
 }
 
 function Drag() {
@@ -206,6 +222,21 @@ function Drag() {
     app._sculptManager.setToolIndex(7);
     app._sculptManager.setTempToolIndex(7);
     app._sculptManager.selectionChanged(app._mainObj);
+
+    deactivateToolButtons(2);
+}
+
+function deactivateToolButtons(id) {
+    for (var i = 0; i < allTools.length; i++) {
+
+        allTools[i].parentElement.style.background = "url(./resources/ui/bg.png) no-repeat";
+        allTools[i].parentElement.style.backgroundSize = "100%";
+
+    }
+
+    allTools[id].parentElement.style.background = "url(./resources/ui/bg_red.png) no-repeat";
+    allTools[id].parentElement.style.backgroundSize = "100%";
+
 }
 
 
@@ -213,7 +244,7 @@ function createEye(id, parent) {
     let elem = document.createElement("div");
     let img = document.createElement("img");
 
-    let eyeSize = '4rem';
+
 
     img.src = eyeURLs[id];
     img.style.width = eyeSize;
@@ -223,8 +254,8 @@ function createEye(id, parent) {
     elem.appendChild(img);
     // elem.style.display = "contents";
     elem.style.pointerEvents = 'all';
-    elem.style.width = '100%';
-    elem.style.height = 'auto';
+    elem.style.width = eyeSize;
+    elem.style.height = eyeSize;
     elem.id = id;
 
 
@@ -241,7 +272,6 @@ function LoadTexture(url, id) {
 }
 
 function Undo() {
-    console.log(app);
 
     app._stateManager.undo();
 }
@@ -252,47 +282,48 @@ function toggleForm(value) {
 
 function replaceColor(_canvas) {
 
-    // var ctx = _canvas.getContext("2d");
-    // var imageData = ctx.getImageData(0, 0, _canvas.width, _canvas.height);
+    var ctx = _canvas.getContext("2d");
+    var imageData = ctx.getImageData(0, 0, _canvas.width, _canvas.height);
 
-    // var data = imageData.data;
+    var data = imageData.data;
 
-    // console.log(data);
+    console.log(data);
 
-    // for (var i = 0; i < data.length; i += 4) {
-    //     var red = data[i + 0];
-    //     var green = data[i + 1];
-    //     var blue = data[i + 2];
+    for (var i = 0; i < data.length; i += 4) {
+        var red = data[i + 0];
+        var green = data[i + 1];
+        var blue = data[i + 2];
 
-    //     var redA = false;
-    //     var blueA = false;
-    //     var greenA = false;
+        var redA = false;
+        var blueA = false;
+        var greenA = false;
 
-    //     var variance = 5;
+        var variance = 5;
 
-    //     var redbase = 255;
-    //     var greenBase = 255;
-    //     var blueBase = 255;
+        var redbase = 122;
+        var greenBase = 237;
+        var blueBase = 140;
 
 
-    //     if (green > greenBase - variance || green < greenBase + variance)
-    //         greenA = true;
+        if (green > greenBase - variance && green < greenBase + variance)
+            greenA = true;
 
-    //     if (blue > blueBase - variance || blue < blueBase + variance)
-    //         blueA = true;
+        if (blue > blueBase - variance && blue < blueBase + variance)
+            blueA = true;
 
-    //     if (red > redbase - variance || red < redbase + variance)
-    //         redA = true;
+        if (red > redbase - variance && red < redbase + variance)
+            redA = true;
 
-    //     if (redA && greenA && blueA) {
-    //         data[i + 3] = 0;
-    //     }
-    // }
-    // ctx.putImageData(imageData, 0, 0);
+        if (redA && greenA && blueA) {
+
+            data[i + 3] = 0;
+        }
+    }
+    ctx.putImageData(imageData, 0, 0);
 
     // open in new window like this
-  
-   var w = window.open('', '');
+
+    var w = window.open('', '');
     w.document.title = "Screenshot";
     var img = new Image();
     // // Without 'preserveDrawingBuffer' set to true, we must render now
@@ -307,11 +338,11 @@ function takeScreenshot() {
         // Without 'preserveDrawingBuffer' set to true, we must render now
         // img.src = canvas.toDataURL();
 
-        // replaceColor(canvas); VON JONAS AUSGEBLENDET
-  save(canvas.toDataURL());
+        replaceColor(canvas);
+        // VON JONAS AUSGEBLENDET
+        // save(canvas.toDataURL());
     });
-app.render();
-   
+
 }
 
 
