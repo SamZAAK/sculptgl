@@ -355,13 +355,13 @@ class Scene {
             if (meshes[i].isTransparent()) break;
             meshes[i].render(this);
         }
-        var startTransparent = i;
+        // var startTransparent = i;
         // if (this._meshPreview) this._meshPreview.render(this);
-        gl.enable(gl.BLEND);
+        // gl.enable(gl.BLEND);
 
         // this._background.render();
 
-        gl.disable(gl.BLEND);
+        // gl.disable(gl.BLEND);
 
 
         // background

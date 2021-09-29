@@ -6,8 +6,8 @@ class Crease extends SculptBase {
     constructor(main) {
         super(main);
 
-        this._radius = 100;
-        this._intensity = 0.5;
+        this._radius = (window.mobileCheck()) ? 50 : 100;
+        this._intensity = (window.mobileCheck()) ? 0.3 : 0.5;
         this._negative = true;
         this._culling = false;
         this._idAlpha = 0;

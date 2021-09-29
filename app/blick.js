@@ -329,13 +329,15 @@ function replaceColor(_canvas) {
 
     // open in new window like this
 
-    var w = window.open('', '');
-    w.document.title = "Screenshot";
-    var img = new Image();
-    // // Without 'preserveDrawingBuffer' set to true, we must render now
-    img.src = _canvas.toDataURL();
-    w.document.body.appendChild(img);
-    // save(_canvas.toDataURL());
+    // var w = window.open('', '');
+    // w.document.title = "Screenshot";
+    // var img = new Image();
+    // // // Without 'preserveDrawingBuffer' set to true, we must render now
+    // img.src = _canvas.toDataURL();
+    // w.document.body.appendChild(img);
+
+    save(_canvas.toDataURL());
+    // save(canvas.toDataURL());
 
 }
 

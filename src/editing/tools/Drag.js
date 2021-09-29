@@ -7,7 +7,7 @@ class Drag extends SculptBase {
     constructor(main) {
         super(main);
 
-        this._radius = 90;
+        this._radius = (window.mobileCheck()) ? 60 : 90;
         this._dragDir = [0.0, 0.0, 0.0];
         this._dragDirSym = [0.0, 0.0, 0.0];
         this._idAlpha = 0;
