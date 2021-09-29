@@ -33,18 +33,22 @@
             padding: 0;
             margin: 0;
             box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
         }
 
         html,
         body {
             width: 100%;
             height: 100%;
+
         }
 
         html {
             font-size: 20px;
         }
-
         #formular {
             background-color: #bfbfbf;
             font-family: 'Monument Grotesk';
@@ -56,6 +60,7 @@
             right: -35rem;
             top: 0;
             transition: right .6s ease-out;
+            z-index: 1000;
         }
 
         #formular.in {
@@ -66,14 +71,23 @@
             background-color: transparent;
             border: none;
             clear: both;
+            -webkit-appearance: none;
             width: 100%;
             border-bottom: 1px solid #000;
             font-family: inherit;
             outline: none;
+            border-radius: 0;
             font-size: inherit;
             padding: .35rem 0;
         }
-
+#formular.in + .blocker {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    top: 0;
+    left: 0;
+}
         .form-group,
         .formcheckbox {
             margin: 0 0 2rem;
@@ -86,8 +100,7 @@
         }
 
         .btn-primary {
-            font-family: Arial;
-            padding: .25rem .65rem;
+            padding: .15rem .65rem;
             border: none;
             font-size: inherit;
             cursor: pointer;
@@ -96,22 +109,22 @@
         }
 
         .btn-primary:hover {
-            background-color: #000;
-            color: #FFF;
+            background-color: #ff003e;
+            color: #000;
         }
 
         #formular #inp-newsletter {
             clear: none;
             -webkit-appearance: checkbox;
-            height: .1rem;
+            height: .9rem;
             padding: 0;
-            width: .1rem;
+            width: .9rem;
             margin: 0.15rem 0 0 0.1rem;
             position: relative;
             text-align: center;
             border: none;
             vertical-align: top;
-            font-size: .1rem;
+            font-size: .9rem;
             display: inline-block;
         }
 
@@ -128,7 +141,7 @@
             height: 1rem;
             cursor: pointer;
             width: 1rem;
-            margin: -.1rem 0 0 -0.2rem;
+            margin: -.1rem 0 0 -0.5rem;
             content: '';
             display: inline-block;
             background-color: #bfbfbf;
@@ -146,7 +159,7 @@
 
         @font-face {
             font-family: 'Scotch Genovese';
-            src: url('ScotchGenovese-Book.woff2') format('woff2'), url('ScotchGenovese-Book.woff') format('woff');
+            src: url('fonts/ScotchGenovese-Book.woff2') format('woff2'), url('fonts/ScotchGenovese-Book.woff') format('woff');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -154,7 +167,7 @@
 
         @font-face {
             font-family: 'Monument Grotesk';
-            src: url('MonumentGrotesk-Medium.woff2') format('woff2'), url('MonumentGrotesk-Medium.woff') format('woff');
+            src: url('fonts/MonumentGrotesk-Medium.woff2') format('woff2'), url('fonts/MonumentGrotesk-Medium.woff') format('woff');
             font-weight: 500;
             font-style: normal;
             font-display: swap;
@@ -170,6 +183,8 @@
             -webkit-user-select: none;
             -o-user-select: none;
             user-select: none;
+                letter-spacing: 0.02em;
+            line-height: 1.2;
         }
 
         .tools {
@@ -195,6 +210,8 @@
             cursor: pointer;
             font-family: 'Monument Grotesk';
             background-color: #e9e5ef;
+                letter-spacing: 0.02em;
+            line-height: 1.2;
         }
 
         button:hover {
@@ -308,7 +325,10 @@
             .menu{
                 width:unset;
             }
-
+#formular {
+    max-width: 100%;
+    padding: 2rem .25rem 1rem .25rem;
+}
 
             .left.top {
                 flex-direction: row;
@@ -327,6 +347,33 @@
 </head>
 
 <body>
+    <?php $lang = $_GET['lang'];
+
+    if($lang == 'en'){
+        $tools = 'Tools';
+        $texture = 'Texture';
+        $dragndrop = 'Drag &amp; Drop';
+        $nametext = 'Your name (real or pseudonym)';
+        $emailtext = 'Your email address';
+        $newslettertext = 'Yes, I would like to subscribe to the Blickfelder newsletter.';
+        $pflichtfeldtext = 'Mandatory field / Your name will appear in the archive of all creatures next to your creation.';
+        $submittext = 'Submit';
+        $done = 'Done?';
+        $langtag = 'en/';
+    }
+    else{
+         $tools = 'Werkzeuge';
+        $texture = 'Textur';
+        $dragndrop = 'Drag &amp; Drop';
+        $nametext = 'Dein Name (real oder Pseudonym)';
+        $emailtext = 'Deine E-Mail-Adresse';
+        $newslettertext = 'Ja, ich möchte den Blickfelder-Newsletter abonnieren.';
+        $pflichtfeldtext = 'Pflichtfeld / Dein Name wird im Archiv aller Kreaturen neben deiner Kreation stehen.';
+        $submittext = 'Abschicken';
+        $done = 'Fertig?';
+        $langtag = '';
+    }
+    ?>
     <script src='sculptgl.js'></script>
     <script src="draggabilly.pkgd.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -337,15 +384,15 @@
     <input type='file' id='textureopen' style='display: none' />
     <input type='file' id='matcapopen' style='display: none' />
 
-    <div id='viewport' onclick='toggleForm("none")'>
+    <div id='viewport'>
         <div id="eyeport" style="position:fixed;z-index: 1000;width: 100%;height: 100%; pointer-events: none;"></div>
         <canvas id='canvas'></canvas>
     </div>
     <div class="tools">
         <div class="menu left top">
             <div>
-                <button class="dropdownButton">Werkzeuge</button>
-                <div class="dropdown" style="margin-bottom: 1rem;">
+                <button class="dropdownButton"><?php echo $tools; ?></button>
+                <div class="dropdown" style="margin-bottom: 1rem;>
                     <button class="selectable" onclick='Paint()'>
                         <image class="iconmini" src="resources/ui/pull.png"></image>
                     </button>
@@ -358,7 +405,7 @@
                 </div>
             </div>
             <div>
-                <button class="dropdownButton">Textur</button>
+                <button class="dropdownButton"><?php echo $texture; ?></button>
                 <div class="dropdown">
                     <button class="selectable" onclick="LoadTexture('resources/bg.png', 0)">
                         <image class="icon" src="resources/ui/1.png"></image>
@@ -379,7 +426,7 @@
         </div>
         <div class="menu right top">
             <div>
-                <button class="dropdownButton">Drag & Drop</button>
+                <button class="dropdownButton"><?php echo $dragndrop; ?></button>
                 <div class="dropdown">
                     <button class="selectable" id="eye">
                     </button>
@@ -397,7 +444,7 @@
             </div>
         </div>
         <div class="menu right bottom" style="width:unset">
-            <button id="fertig" onclick='toggleForm("in ");'>Fertig?</button>
+            <button id="fertig" onclick='toggleForm("in");takeScreenshot();'><?php echo $done; ?></button>
         </div>
 
         <div class="menu trash bottom" id="trash">
@@ -409,7 +456,6 @@
     <div id="formular">
 
         <?php
-
         if (isset($_POST['submit'])) {
             $dbhost = 'windspie.mysql.db.hostpoint.ch';
             $dbuser = 'windspie_blickf';
@@ -420,52 +466,46 @@
             if (!$conn) {
                 die('Could not connect: ' . mysqli_error());
             }
-            include 'upload_data.php';
+            $filepath = $_COOKIE['monster'];
+            $filepath = "https://blickfelder.ch/creature/monsters/". $filepath;
             $inp_email = $_POST['inp-email'];
             $inp_name = $_POST['inp-name'];
             $inp_newsletter = $_POST['inp-newsletter'];
-            $upload_dir = "https://blickfelder.ch/testformular/monsters/";
-            $file = $upload_dir . $time . ".png";
-            $filename = $file;
-
-            $sql = "INSERT INTO monsters " . "(name,email,newsletter,monsterimg,datestamp) " . "VALUES('$inp_name','$inp_email','$inp_newsletter','$filename',NOW())";
+            $sql = "INSERT INTO monsters " . "(name,email,newsletter,monsterimg,datestamp) " . "VALUES('$inp_name','$inp_email','$inp_newsletter','$filepath',NOW())";
             $retval = mysqli_query($conn, $sql);
-
             if (!$retval) {
                 die('Could not enter data: ' . mysqli_error());
             }
-
-            echo "Danke für die Einreichung!\n";
-
+           echo "<script>window.location.replace('https://blickfelder.ch/".$langtag."oktober/danke');</script>";
             mysqli_close($conn);
         } else {
         ?>
 
-            <form action="https://blickfelder.ch/oktober/danke" method="post" name="monsterform">
+            <form action="<?php $_SERVER['PHP_SELF']; ?>" method="post" name="monsterform">
                 <div class="form-group" id="fg-name">
-                    <label class="control-label" for="inp-name">Dein Name (real oder Pseudonym)*:</label> <input class="form-control" id="inp-name" name="inp-name" required="" type="text" value="">
+                    <label class="control-label" for="inp-name"><?php echo $nametext; ?>*:</label> <input class="form-control" id="inp-name" name="inp-name" required="" type="text" value="">
                 </div>
                 <div class="form-group" id="fg-email">
-                    <label class="control-label" for="inp-email">Deine E-Mail-Adresse*:</label> <input class="form-control" id="inp-email" name="inp-email" required="" type="email" value="">
+                    <label class="control-label" for="inp-email"><?php echo $emailtext; ?>*:</label> <input class="form-control" id="inp-email" name="inp-email" required="" type="email" value="">
                 </div>
                 <div class="checkbox formcheckbox" id="fg-newsletter">
                     <label><input id="inp-newsletter" name="inp-newsletter" type="checkbox" value="1">
                         <p>
-                            Ja, ich möchte den Blickfelder-Newsletter abonnieren.
+                            <?php echo $newslettertext; ?>
                         </p>
                     </label>
 
                 </div>
                 <input name="hidden_data" id='hidden_data' type="hidden" />
-                <button class="btn btn-primary" id="submitbutton" name="submit" onclick="" type="submit" value="Abschicken">Abschicken</button>
+                <button class="btn btn-primary" id="submitbutton" name="submit" type="submit" value="Abschicken"><?php echo $submittext; ?></button>
             </form>
             <p class="small">
-                *Pflichtfeld / Dein Name wird im Archiv aller Kreaturen neben deiner Kreation stehen.
+                *  <?php echo $pflichtfeldtext; ?>
             </p> <?php
                 }
                     ?>
     </div>
-
+<div class="blocker" onclick='toggleForm("in")'></div>
 </body>
 
 </html>
