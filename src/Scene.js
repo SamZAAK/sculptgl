@@ -104,7 +104,10 @@ class Scene {
         if (modelURL) this.addModelURL(modelURL);
         else this.addSphere();
 
-
+        //
+        if (window.mobileCheck()) {
+            this._camera.zoom(1.6);
+        }
     }
 
     addModelURL(url) {
@@ -293,6 +296,7 @@ class Scene {
 
         //transp
         // this._rttTransparent = new Rtt(this._gl, null, this._rttOpaque.getDepth(), true);
+
         // gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
         // this._rttTransparent.render(this);
 
@@ -355,64 +359,67 @@ class Scene {
         // if (this._meshPreview) this._meshPreview.render(this);
         gl.enable(gl.BLEND);
 
-        this._background.render();
+        // this._background.render();
 
         gl.disable(gl.BLEND);
 
 
         // background
         if (bg) {
-            // if (this._background._texture == null) {
-            //     this._background.loadBackgroundURL("resources/bg.png");
-            // }
+            if (this._background._texture == null && !this._background._isLoading) {
+                this._background.loadBackgroundURL("resources/bg.png");
+            }
+            this._background.render();
 
         } else {
-            // this._background.deleteTexture();
-            // this._background.createOnePixelTexture(0, 237, 50, 0);
+            this._background.deleteTexture();
+            this._background.createOnePixelTexture(255, 255, 255, 0);
             this._background.render();
+
         }
         // Set the backbuffer's alpha to 1.0
-        gl.clearColor(0, 0, 0, 0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        // gl.clearColor(0, 0, 0, 0);
+        // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         ///////////////
         // TRANSPARENT PASS
         ///////////////
-        gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
-        gl.clear(gl.COLOR_BUFFER_BIT);
+        // gl.bindFramebuffer(gl.FRAMEBUFFER, this._rttTransparent.getFramebuffer());
+        // gl.clear(gl.COLOR_BUFFER_BIT);
 
-        gl.enable(gl.BLEND);
+        // gl.enable(gl.BLEND);
 
-        // wireframe for dynamic mesh has duplicate edges
-        gl.depthFunc(gl.LESS);
-        for (i = 0; i < nbMeshes; ++i) {
-            if (meshes[i].getShowWireframe())
-                meshes[i].renderWireframe(this);
-        }
-        gl.depthFunc(gl.LEQUAL);
-
-
-        gl.enable(gl.CULL_FACE);
-
-        for (i = startTransparent; i < nbMeshes; ++i) {
-            gl.cullFace(gl.FRONT); // draw back first
-            meshes[i].render(this);
-            gl.cullFace(gl.BACK); // ... and then front
-            meshes[i].render(this);
-        }
-
-        gl.disable(gl.CULL_FACE);
-
-        /////////////
-        // CONTOUR 2 / 2
-        /////////////
-        if (showContour) {
-            this._rttContour.render(this);
-        }
+        // // wireframe for dynamic mesh has duplicate edges
+        // gl.depthFunc(gl.LESS);
+        // for (i = 0; i < nbMeshes; ++i) {
+        //     if (meshes[i].getShowWireframe())
+        //         meshes[i].renderWireframe(this);
+        // }
+        // gl.depthFunc(gl.LEQUAL);
 
 
-        gl.depthMask(true);
-        gl.disable(gl.BLEND);
+        // gl.enable(gl.CULL_FACE);
+
+        // for (i = startTransparent; i < nbMeshes; ++i) {
+        //     gl.cullFace(gl.FRONT); // draw back first
+        //     meshes[i].render(this);
+        //     gl.cullFace(gl.BACK); // ... and then front
+        //     meshes[i].render(this);
+        // }
+
+        // gl.disable(gl.CULL_FACE);
+
+        ///////////////
+        // CONTOUR 2/2
+        ///////////////
+        // if (showContour) {
+        //     this._rttContour.render(this);
+        // }
+
+
+        // gl.depthMask(true);
+        // gl.disable(gl.BLEND);
 
     }
 
@@ -622,6 +629,10 @@ class Scene {
         mesh.normalizeSize();
         this.subdivideClamp(mesh);
 
+        // var mCen = mesh.getMatrix();
+        // mat4.scale(mCen, mCen, [0.5, 0.5, 0.5]);
+
+
         this._meshes.push(mesh);
         // this._stateManager.pushStateAdd(mesh);
         this.setMesh(mesh);
@@ -777,8 +788,6 @@ class Scene {
         for (var i = 0; i < rm.length; ++i)
             meshes.splice(this.getIndexMesh(rm[i]), 1);
     }
-
-
 
     getIndexMesh(mesh, select) {
         var meshes = select ? this._selectMeshes : this._meshes;

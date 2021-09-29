@@ -218,7 +218,7 @@
         }
 
         .trash {
-            left: 50%-4rem;
+            left: 48%;
             transition: bottom 0.2s ease-out;
         }
 
@@ -283,7 +283,7 @@
         .menu {
             width: 8rem;
             position: fixed;
-            gap: 1rem;
+            /* gap: 1rem; */
             /* margin: 1rem; */
         }
 
@@ -345,7 +345,7 @@
         <div class="menu left top">
             <div>
                 <button class="dropdownButton">Werkzeuge</button>
-                <div class="dropdown">
+                <div class="dropdown" style="margin-bottom: 1rem;">
                     <button class="selectable" onclick='Paint()'>
                         <image class="iconmini" src="resources/ui/pull.png"></image>
                     </button>

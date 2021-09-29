@@ -204,7 +204,7 @@ class Gui {
     }
 
     addAlphaOptions(opts) {
-        this._ctrlSculpting.addAlphaOptions(opts);
+        // this._ctrlSculpting.addAlphaOptions(opts);
     }
 
     deleteGui() {

@@ -282,7 +282,7 @@
         .menu {
             width: 8rem;
             position: fixed;
-            gap: 1rem;
+            /* gap: 1rem; */
             /* margin: 1rem; */
         }
         
@@ -338,7 +338,7 @@
         <div class="menu left top">
             <div>
                 <button class="dropdownButton">Werkzeuge</button>
-                <div class="dropdown">
+                <div class="dropdown" style="margin-bottom: 1rem;">
                     <button class="selectable" onclick='Paint()'>
                         <image class="iconmini"  src="resources/ui/pull.png"></image>
                     </button>
@@ -353,13 +353,13 @@
             <div>
                 <button class="dropdownButton">Textur</button>
                 <div class="dropdown">
-                    <button class="selectable" onclick="LoadTexture('resources/bg.png', 0)">
+                    <button class="selectable" onclick="LoadTexture( 'resources/bg.png', 0)">
                         <image class="icon" src="resources/ui/1.png"></image>
                     </button>
-                    <button class="selectable" onclick="LoadTexture('resources/dropper.png', 1)">
+                    <button class="selectable" onclick="LoadTexture( 'resources/dropper.png', 1)">
                         <image class="icon" src="resources/ui/2.png"></image>
                     </button>
-                    <button class="selectable" onclick="LoadTexture('resources/uv.png', 2)">
+                    <button class="selectable" onclick="LoadTexture( 'resources/uv.png', 2)">
                         <image class="icon" src="resources/ui/3.png"></image>
                     </button>
                 </div>
@@ -395,7 +395,7 @@
 
         <div class="menu trash bottom" id="trash">
             <button class="circle" id="trashbutton">
-                <image class="icon" src="resources/ui/Tool_Augen-loeschen.png "></image>
+                <image class="icon" src="resources/ui/Tool_Augen-loeschen.png"></image>
             </button>
         </div>
     </div>

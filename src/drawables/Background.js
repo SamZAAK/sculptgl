@@ -20,12 +20,14 @@ class Background {
         this._type = 0; // 0: fixed grey, 1 env spec, 2 env ambient
         this._blur = 0.0;
 
+        this._isLoading = false;;
+
         this.init();
     }
 
     init() {
         this.getTexCoordBuffer().update(new Float32Array([0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0]));
-        this._monoTex = this.createOnePixelTexture(0, 237, 50, 0);
+        this._monoTex = this.createOnePixelTexture(255, 255, 255, 0);
         // document.getElementById('backgroundopen').addEventListener('change', this.loadBackground.bind(this), false);
     }
 
@@ -34,13 +36,16 @@ class Background {
 
         var self = this;
         img.onload = function() {
-
+            console.log("hau many times");
             var canvas = self._main.getCanvas();
             self.loadBackgroundTexture(img);
             self.onResize(canvas.width, canvas.height);
             self._main.render();
+            self._isLoading = false;
         };
         img.src = url;
+
+        this._isLoading = true;
     }
 
     loadBackground(event) {
