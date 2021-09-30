@@ -289,6 +289,7 @@
             border-radius: 100%;
             width: 3rem;
             height: 3rem;
+            padding: .65rem;
         }
 
         .left {
@@ -392,7 +393,7 @@
         <div class="menu left top">
             <div>
                 <button class="dropdownButton"><?php echo $tools; ?></button>
-                <div class="dropdown" style="margin-bottom: 1rem;>
+                <div class="dropdown" style="margin-bottom: 1rem;">
                     <button class="selectable" onclick='Paint()'>
                         <image class="iconmini" src="resources/ui/pull.png"></image>
                     </button>
@@ -419,7 +420,7 @@
                 </div>
             </div>
         </div>
-        <div class="menu left bottom" style="left:3rem">
+        <div class="menu left bottom">
             <button class="circle" onclick='Undo()'>
                 <image class="icon" src="resources/ui/back.png"></image>
             </button>
