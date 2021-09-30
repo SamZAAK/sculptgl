@@ -61,6 +61,8 @@ window.addEventListener('load', function() {
 
     setInterval(onTimerTick, 33); // 33 milliseconds = ~ 30 frames per sec
 
+    LoadTexture('resources/bg.png', 1);
+
 });
 
 function onWindowResize() {

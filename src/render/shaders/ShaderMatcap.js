@@ -26,7 +26,7 @@ ShaderMatcap.matcaps = [{
     path: texPath + 'fuck2.png', //'skinHazardousarts.jpg',
     name: 'Skin hazardousarts' // too lazy to tr
 }, {
-    path: texPath + 'fuck5.png',
+    path: texPath + 'fuck2.png',
     name: 'Skin Hazardousarts2' // too lazy to tr
 }, {
     path: texPath + 'pearl.jpg',

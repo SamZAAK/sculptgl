@@ -53,7 +53,7 @@ ShaderPBR.environments = [{
     // https://hdrihaven.com/hdri/?h=studio_small_01
     path: texPath + 'studio_small_01_1k.png',
     sph: [0.534107, 0.589985, 0.617478, 0.119999, 0.130480, 0.128019, 0.089872, 0.088707, 0.088017, 0.099999, 0.151282, 0.138458, 0.005015, 0.035588, 0.027592, 0.114999, 0.116739, 0.120579, -0.057997, -0.069532, -0.070401, 0.385123, 0.411714, 0.454725, 0.303242, 0.333004, 0.350270],
-    exposure: 0.2,
+    exposure: 1.575,
     name: 'Studio small 01'
 }, {
     // https://hdrihaven.com/hdri/?h=moonless_golf
@@ -72,8 +72,7 @@ ShaderPBR.environments = [{
 var opts = getOptionsURL();
 ShaderPBR.idEnv = Math.min(opts.environment, ShaderPBR.environments.length - 1);
 ShaderPBR.idTex = Math.min(opts.environment, ShaderPBR.textures.length - 1);
-ShaderPBR.exposure = 0.7; //opts.exposure === undefined ? ShaderPBR.environments[ShaderPBR.idEnv].exposure : Math.min(opts.exposure, 5);
-
+ShaderPBR.exposure = 1.2; //opts.exposure === undefined ? ShaderPBR.environments[ShaderPBR.idEnv].exposure : Math.min(opts.exposure, 5);
 
 ShaderPBR.uniforms = {};
 ShaderPBR.attributes = {};
@@ -188,6 +187,12 @@ ShaderPBR.updateUniforms = function(mesh, main) {
     mat3.fromMat4(uIBLTmp, main.getCamera().getView());
     gl.uniformMatrix3fv(uniforms.uIblTransform, false, mat3.transpose(uIBLTmp, uIBLTmp));
 
+    // var al = mesh.getAlbedo();
+
+    // al[0] = 240;
+    // al[1] = 235;
+    // al[2] = 215;
+
     gl.uniform3fv(uniforms.uAlbedo, mesh.getAlbedo());
     gl.uniform1f(uniforms.uRoughness, mesh.getRoughness());
     gl.uniform1f(uniforms.uMetallic, mesh.getMetallic());
@@ -203,9 +208,9 @@ ShaderPBR.updateUniforms = function(mesh, main) {
     gl.bindTexture(gl.TEXTURE_2D, ShaderPBR.getOrCreateEnvironment(gl, main, env) || this.getDummyTexture(gl));
     gl.uniform1i(uniforms.uTexture0, 0);
 
-    gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, ShaderPBR.getOrCreateTexture0(gl, main, img) || this.getDummyTexture(gl));
-    gl.uniform1i(uniforms.uTexture1, 0);
+    // gl.activeTexture(gl.TEXTURE1);
+    // gl.bindTexture(gl.TEXTURE_2D, ShaderPBR.getOrCreateTexture0(gl, main, img) || this.getDummyTexture(gl));
+    // gl.uniform1i(uniforms.uTexture1, 0);
 
 
     ShaderBase.updateUniforms.call(this, mesh, main);

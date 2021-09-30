@@ -495,6 +495,10 @@ class Scene {
                 if (idMaterial == 0) {
                     self._mainObj.setShaderType(Enums.Shader.PBR);
                     ShaderPBR.idEnv = 2;
+                    self._mainObj.setAlbedo([240 / 240, 255 / 255, 192 / 255]);
+                    self._mainObj.setRoughness(0.1);
+                    self._mainObj.setMetallic(0);
+
                     // self._mainObj.setShaderType(Enums.Shader.MATCAP);
                     // self._mainObj.setMatcap(idMaterial + 2);
                 } else if (idMaterial == 1) {
@@ -502,7 +506,7 @@ class Scene {
 
                     // ShaderPBR.idTex = 2;
                     self._mainObj.setShaderType(Enums.Shader.MATCAP);
-                    self._mainObj.setMatcap(idMaterial + 2);
+                    self._mainObj.setMatcap(idMaterial + 1);
 
                 } else if (idMaterial == 2) {
                     self._mainObj.setShaderType(Enums.Shader.MATCAP);
