@@ -7,7 +7,7 @@ var eyeEmpty = [];
 var trash;
 var addedToEye = 0;
 var allEyes;
-var eyeSize = '4.2rem';
+var eyeSize = 4.2;
 var allTools;
 
 window.mobileCheck = function() {
@@ -130,26 +130,17 @@ function makeeye(i, eye) {
     draggies.push(draggie);
 
     var self = _this;
-    // draggie.setPosition(window.innerWidth - 145, i * 100 + 90);
 
     draggie.on('pointerDown', function(event, pointer) {
-
-        // let left = event.srcElement.style.left;
-        // let top = event.srcElement.top;
-
-        // console.log(event.srcElement.style);
 
         if (event.srcElement.parentElement.id != "eyeport") {
             document.getElementById("eyeport").appendChild(event.srcElement);
 
             self.addedToEye++;
-            console.log(self.addedToEye);
-            this.setPosition(pointer.clientX - 95 / 2, pointer.clientY - self.addedToEye * 95 + 95 / 2);
+            var ding = parseInt(getComputedStyle(document.documentElement).fontSize);
+            var size = ding * eyeSize;
+            this.setPosition(pointer.clientX - size / 2, pointer.clientY - self.addedToEye * size + size / 2);
 
-            // event.srcElement.style.left = pointer.clientX + "px";
-            // event.srcElement.style.bottom = pointer.clientY + "px";
-
-            // console.log(event.srcElement.style);
         }
 
         //Show Trash
@@ -158,6 +149,9 @@ function makeeye(i, eye) {
     });
     draggie.on('pointerUp', function(event, pointer) {
         trash.style.bottom = '-100px';
+
+        if (event.srcElement.id == "canvas")
+            return;
 
     });
 
@@ -174,17 +168,18 @@ function makeeye(i, eye) {
 
     draggie.on('dragEnd', function(event, pointer) {
 
+        // console.log(event);
+
         if (event.srcElement.id == "canvas")
             return;
 
         if (pointer.pageX < window.innerWidth - 100) {
 
             if (hasClass(event.srcElement, "placed")) {
-                console.log("move an existing one");
+                // console.log("move an existing one");
             } else {
                 let id = event.srcElement.id;
                 event.srcElement.className = "placed";
-                // document.getElementById("eyeport").appendChild(event.srcElement);
 
                 eyeEmpty[id] = true;
             }
@@ -202,11 +197,8 @@ function hasClass(target, className) {
     return new RegExp('(\\s|^)' + className + '(\\s|$)').test(target.className);
 }
 
-
-
-
 function Paint() {
-    // console.log("pinch");
+
     app._sculptManager.setToolIndex(1);
     app._sculptManager.setTempToolIndex(1);
     app._sculptManager.selectionChanged(app._mainObj);
@@ -215,7 +207,6 @@ function Paint() {
 }
 
 function Crease() {
-    // console.log("crease");
 
     app._sculptManager.setToolIndex(6);
     app._sculptManager.setTempToolIndex(6);
@@ -225,7 +216,6 @@ function Crease() {
 }
 
 function Drag() {
-    // console.log("crease");
 
     app._sculptManager.setToolIndex(7);
     app._sculptManager.setTempToolIndex(7);
@@ -255,15 +245,15 @@ function createEye(id, parent) {
 
 
     img.src = eyeURLs[id];
-    img.style.width = eyeSize;
-    img.style.height = eyeSize;
+    img.style.width = eyeSize + 'rem';
+    img.style.height = eyeSize + 'rem';
     img.style.position = "flexible";
 
     elem.appendChild(img);
     // elem.style.display = "contents";
     elem.style.pointerEvents = 'all';
-    elem.style.width = eyeSize;
-    elem.style.height = eyeSize;
+    elem.style.width = eyeSize + 'rem';
+    elem.style.height = eyeSize + 'rem';
     elem.id = id;
 
 
@@ -296,7 +286,7 @@ function replaceColor(_canvas) {
 
     var data = imageData.data;
 
-    console.log(data);
+    // console.log(data);
 
     for (var i = 0; i < data.length; i += 4) {
         var red = data[i + 0];
