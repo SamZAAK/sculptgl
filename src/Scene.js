@@ -642,6 +642,12 @@ class Scene {
         this.setMesh(mesh);
 
         this._mainObj = mesh;
+
+        mesh.setShaderType(Enums.Shader.PBR);
+        ShaderLib[Enums.Shader.PBR].idEnv = 2;
+        mesh.setAlbedo([240 / 240, 255 / 255, 192 / 255]);
+        mesh.setRoughness(0.1);
+        mesh.setMetallic(0);
         // return this.addNewMesh(mesh);
     }
 
