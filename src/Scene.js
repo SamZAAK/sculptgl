@@ -104,9 +104,18 @@ class Scene {
         if (modelURL) this.addModelURL(modelURL);
         else this.addSphere();
 
-        //
+
+        this.samZOOM();
+
+    }
+
+    samZOOM() {
+        var zoom = 1;
         if (window.mobileCheck()) {
-            this._camera.zoom(1.6);
+            zoom = 2;
+            var ratio = window.innerWidth / window.innerHeight;
+
+            this._camera.zoom(zoom);
         }
     }
 
@@ -271,11 +280,19 @@ class Scene {
 
         gl.enable(gl.DEPTH_TEST);
 
-        this._sculptManager.postRender(); // draw sculpting gizmo stuffs
+        // this._sculptManager.postRender(); // draw sculpting gizmo stuffs
 
     }
 
     screenshot() {
+
+        var mCen = this._mainObj.getMatrix();
+
+        if (window.mobileCheck()) {
+            mat4.translate(mCen, mCen, [0, 0, 1]);
+        } else {
+            mat4.translate(mCen, mCen, [0, 0, -0.1]);
+        }
 
         this._preventRender = false;
         this.updateMatricesAndSort();
@@ -310,8 +327,10 @@ class Scene {
         // // Without 'preserveDrawingBuffer' set to true, we must render now
         // img.src = document.getElementById('canvas').toDataURL();
 
+
         // w.document.body.appendChild(img);
         this._drawScene(false);
+
     }
 
     _drawScene(bg) {
@@ -559,6 +578,8 @@ class Scene {
 
     /** Called when the window is resized */
     onCanvasResize() {
+
+
         var viewport = this._viewport;
         var newWidth = viewport.clientWidth * this._pixelRatio;
         var newHeight = viewport.clientHeight * this._pixelRatio;
