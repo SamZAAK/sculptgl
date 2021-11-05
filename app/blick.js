@@ -112,6 +112,8 @@ function registerDropdowns(acc) {
     }
 }
 
+
+
 function onTimerTick() {
     for (var i = 0; i < eyeEmpty.length; i++) {
 
@@ -321,22 +323,27 @@ function replaceColor(_canvas) {
 
     // open in new window like this
 
-    // var w = window.open('', '');
-    // w.document.title = "Screenshot";
-    // var img = new Image();
-    // // // Without 'preserveDrawingBuffer' set to true, we must render now
-    // img.src = _canvas.toDataURL();
-    // w.document.body.appendChild(img);
+    var w = window.open('', '');
+    w.document.title = "Screenshot";
+    var img = new Image();
+    // // Without 'preserveDrawingBuffer' set to true, we must render now
+    img.src = _canvas.toDataURL();
+    w.document.body.appendChild(img);
 
-    save(_canvas.toDataURL());
+    // save(_canvas.toDataURL());
     // save(canvas.toDataURL());
 
 }
 
 function takeScreenshot() {
 
+    var ratio = 1; //4096 / window.innerHeight;
+
+
     app.screenshot();
-    html2canvas(document.getElementById('viewport')).then(canvas => {
+    html2canvas(document.getElementById('viewport'), {
+        scale: ratio
+    }).then(canvas => {
         // Without 'preserveDrawingBuffer' set to true, we must render now
         // img.src = canvas.toDataURL();
 
